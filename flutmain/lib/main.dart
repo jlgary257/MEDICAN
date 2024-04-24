@@ -1,53 +1,59 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MEDICAN',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'MEDICAN'),
+      title: 'My Flutter App', // App title displayed in the status bar
+      home: MyHomePage(title: 'Hello World!'), // Set the home screen
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
   final String title;
 
+  MyHomePage({Key? key, required this.title}) : super(key: key); // Constructor
+
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0; // State variable to keep track of counter
+
+  void _incrementCounter() {
+    setState(() {
+      // Update state and rebuild the widget
+      _counter++;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(widget.title,
-            style: const TextStyle(
-                color: Colors.red,
-                fontSize: 30.0,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Roboto')),
+        title: Text(widget.title), // Access title passed from MyApp
       ),
-      body: const Align(
-        alignment: Alignment.topLeft,
-        child: Text(
-          'Welcome Medical Analysis System',
-          style: TextStyle(color: Colors.red),
+      body: Center(
+        child: Column(
+          mainAxisAlignment:
+              MainAxisAlignment.center, // Align content vertically
+          children: <Widget>[
+            Text(
+              'You have pushed the button this many times:',
+            ),
+            Text(
+              '$_counter', // Display counter value
+              style: TextStyle(fontSize: 24.0),
+            ),
+            ElevatedButton(
+              onPressed: _incrementCounter,
+              child: Text('Increment'),
+            ),
+          ],
         ),
       ),
     );
