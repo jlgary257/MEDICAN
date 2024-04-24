@@ -6,8 +6,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'My Flutter App', // App title displayed in the status bar
-      home: MyHomePage(title: 'Hello World!'), // Set the home screen
+      debugShowCheckedModeBanner: false,
+      title: 'MEDICAN', // App title displayed in the status bar
+      home: MyHomePage(title: 'MEDICAN'), // Set the home screen
     );
   }
 }
@@ -22,14 +23,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0; // State variable to keep track of counter
-
-  void _incrementCounter() {
-    setState(() {
-      // Update state and rebuild the widget
-      _counter++;
-    });
-  }
+  TextEditingController username = TextEditingController();
+  TextEditingController password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -42,16 +37,28 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment:
               MainAxisAlignment.center, // Align content vertically
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+            TextField(
+              controller: username,
+              decoration: InputDecoration(labelText: 'Username'),
             ),
-            Text(
-              '$_counter', // Display counter value
-              style: TextStyle(fontSize: 24.0),
+            SizedBox(height: 20.0),
+            TextField(
+              controller: password,
+              decoration: InputDecoration(labelText: 'Password'),
+              obscureText: true,
             ),
+            SizedBox(height: 20.0),
+            Text('Jojo'),
             ElevatedButton(
-              onPressed: _incrementCounter,
-              child: Text('Increment'),
+              onPressed: () {
+                final snackBar = SnackBar(
+                  content: Text('$username'), // Text displayed in the Snackbar
+                  backgroundColor:
+                      Colors.red, // Optional: Customize background color
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              },
+              child: Text('Login'),
             ),
           ],
         ),
