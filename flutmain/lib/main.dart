@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MEDICAN', // App title displayed in the status bar
-      home: MyHomePage(title: 'MEDICAN'), // Set the home screen
+      home: MyHomePage(title: 'MedicAN'), // Set the home screen
     );
   }
 }
@@ -23,14 +23,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  TextEditingController username = TextEditingController();
-  TextEditingController password = TextEditingController();
+  final username = TextEditingController();
+  final password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title), // Access title passed from MyApp
+        title: Text(widget.title,
+            style: const TextStyle(
+                color: Colors.red,
+                fontSize: 30.0,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Roboto')), // Access title passed from MyApp
       ),
       body: Center(
         child: Column(
@@ -39,12 +44,12 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             TextField(
               controller: username,
-              decoration: InputDecoration(labelText: 'Username'),
+              decoration: const InputDecoration(labelText: 'Username'),
             ),
             SizedBox(height: 20.0),
             TextField(
               controller: password,
-              decoration: InputDecoration(labelText: 'Password'),
+              decoration: const InputDecoration(labelText: 'Password'),
               obscureText: true,
             ),
             SizedBox(height: 20.0),
@@ -52,13 +57,13 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 final snackBar = SnackBar(
-                  content: Text('$username'), // Text displayed in the Snackbar
-                  backgroundColor:
-                      Colors.red, // Optional: Customize background color
+                  content: Text('Username: {$username}\n'
+                      'Password: $password'),
+                  backgroundColor: Colors.green,
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               },
-              child: Text('Login'),
+              child: const Text('Login'),
             ),
           ],
         ),
