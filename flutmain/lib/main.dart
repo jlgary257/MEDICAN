@@ -56,12 +56,13 @@ class _MyHomePageState extends State<MyHomePage> {
             Text('Jojo'),
             ElevatedButton(
               onPressed: () {
-                final snackBar = SnackBar(
-                  content: Text('Username: {$username}\n'
-                      'Password: $password'),
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Username: ' +
+                      username.text +
+                      '\nPassword: ' +
+                      password.text),
                   backgroundColor: Colors.green,
-                );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                ));
               },
               child: const Text('Login'),
             ),
