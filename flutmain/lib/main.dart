@@ -53,7 +53,6 @@ class _MyHomePageState extends State<MyHomePage> {
               obscureText: true,
             ),
             SizedBox(height: 20.0),
-            Text('Jojo'),
             ElevatedButton(
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
