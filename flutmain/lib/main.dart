@@ -1,6 +1,21 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+//void main() => runApp(MyApp());
+
+Future main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  if(kIsWeb){
+    await Firebase.initializeApp(options:
+    FirebaseOptions(apiKey: "AIzaSyDpdg5OJ7RPjBJ1H6P58RHBmbwXpJ0Ht0k",
+        appId: "1:1075732898430:web:2820d3c5f6efb631f4ee2f",
+        messagingSenderId: "1075732898430",
+        projectId: "medican-257"));
+  }else {
+    await Firebase.initializeApp();
+  }
+}
 
 class MyApp extends StatelessWidget {
   @override
