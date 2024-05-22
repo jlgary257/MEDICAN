@@ -1,7 +1,10 @@
+
+import 'package:flutmain/features/user_auth/presentation/pages/login_page.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  final Widget? child;
+  const SplashScreen({super.key, this.child});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -12,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Future.delayed(Duration(seconds: 3), (){
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginPage()), (route) => false);
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => widget.child!), (route) => LoginPage());
     }
     );
     super.initState();

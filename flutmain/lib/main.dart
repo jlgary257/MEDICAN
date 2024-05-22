@@ -1,4 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutmain/features/app/splash_screen/splash_screen.dart';
+import 'package:flutmain/features/user_auth/presentation/pages/login_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +17,7 @@ Future main() async{
   }else {
     await Firebase.initializeApp();
   }
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -23,7 +26,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MEDICAN', // App title displayed in the status bar
-      home: MyHomePage(title: 'MedicAN'), // Set the home screen
+      home: SplashScreen(
+      ),
     );
   }
 }
