@@ -1,11 +1,32 @@
+import 'package:codetest/features/user_auth/firebase_auth_implementation/firebase_auth_services.dart';
 import 'package:codetest/features/user_auth/presentation/pages/home_page.dart';
 import 'package:codetest/features/user_auth/presentation/pages/signUpPage.dart';
 import 'package:codetest/features/user_auth/presentation/widgets/form_container_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+
+  bool _isSigning =false;
+
+  final FirebaseAuthService _auth = FirebaseAuthService();
+
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,20 +47,19 @@ class LoginPage extends StatelessWidget {
               height: 30,
             ),
             FormContainerWidget(
+              controller:  _emailController,
               hintText: "Email",
               isPasswordField: false,
             ),
             SizedBox(height: 10),
             FormContainerWidget(
+              controller:  _passwordController,
               hintText: "Password",
               isPasswordField: true,
             ),
             SizedBox(height: 30,),
             GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomePage()));
-              },
+              onTap: _signIn,
               child: Container(
                 width: double.infinity,
                 height: 50,
@@ -68,5 +88,19 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
+  }
+  void _signIn() async{
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    User? user = await _auth.signinEmNPass(email, password);
+
+    if(user != null){
+      print("User is successfully Sign in");
+      Navigator.pushNamed(context, "/home");
+    } else{
+      print("Error occurred");
+    }
+
   }
 }
