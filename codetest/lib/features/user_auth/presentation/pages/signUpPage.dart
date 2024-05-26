@@ -12,9 +12,9 @@ class SignUpPage extends StatelessWidget {
         title: Text("SignUp"),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 300),
+        padding: const EdgeInsets.symmetric(horizontal: 200),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
               "Sign Up",
@@ -30,6 +30,11 @@ class SignUpPage extends StatelessWidget {
             SizedBox(height: 10),
             FormContainerWidget(
               hintText: "Email",
+              isPasswordField: false,
+            ),
+            SizedBox(height: 10),
+            FormContainerWidget(
+              hintText: "Name",
               isPasswordField: false,
             ),
             SizedBox(height: 10),
