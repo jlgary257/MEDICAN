@@ -2,6 +2,7 @@ import 'package:codetest/features/user_auth/firebase_auth_implementation/firebas
 import 'package:codetest/features/user_auth/presentation/pages/home_page.dart';
 import 'package:codetest/features/user_auth/presentation/pages/signUpPage.dart';
 import 'package:codetest/features/user_auth/presentation/widgets/form_container_widget.dart';
+import 'package:codetest/global/toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
-  bool _isSigning =false;
+  bool _isSigningIn =false;
 
   final FirebaseAuthService _auth = FirebaseAuthService();
 
@@ -67,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                     color: Colors.red,
                     borderRadius: BorderRadius.circular(10)
                 ),
-                child: Center(child: Text("Login", style: TextStyle(
+                child: Center(child: _isSigningIn ? CircularProgressIndicator(color: Colors.white,) : Text("Login", style: TextStyle(
                     color: Colors.white, fontWeight: FontWeight.bold),)),
               ),
             ),
@@ -90,16 +91,25 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
   void _signIn() async{
+
+    setState(() {
+      _isSigningIn = true;
+    });
+
     String email = _emailController.text;
     String password = _passwordController.text;
 
     User? user = await _auth.signinEmNPass(email, password);
 
+    setState(() {
+      _isSigningIn =false;
+    });
+
     if(user != null){
-      print("User is successfully Sign in");
+      showToast(message: "User is successfully Sign in");
       Navigator.pushNamed(context, "/home");
     } else{
-      print("Error occurred");
+      showToast(message: "Error occurred");
     }
 
   }

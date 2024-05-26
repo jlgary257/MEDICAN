@@ -2,6 +2,7 @@
 import 'package:codetest/features/user_auth/presentation/pages/home_page.dart';
 import 'package:codetest/features/user_auth/presentation/pages/login_page.dart';
 import 'package:codetest/features/user_auth/presentation/widgets/form_container_widget.dart';
+import 'package:codetest/global/toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
 
 
-  bool _isSigning =false;
+  bool _isSigningUp =false;
 
   final FirebaseAuthService _auth = FirebaseAuthService();
 
@@ -80,7 +81,10 @@ class _SignUpPageState extends State<SignUpPage> {
               height: 30,
             ),
             GestureDetector(
-            onTap: _signUp,
+            onTap: (){
+              _signUp();
+
+            },
               child: Container(
                 width: double.infinity,
                 height: 45,
@@ -88,7 +92,7 @@ class _SignUpPageState extends State<SignUpPage> {
                  color: Colors.red,
                  borderRadius: BorderRadius.circular(10)),
                 child: Center(
-                  child: Text(
+                  child: _isSigningUp ? CircularProgressIndicator(color: Colors.white,) : Text(
                   "Sign Up",
                   style:
                   TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -114,6 +118,11 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
   void _signUp() async{
+
+    setState(() {
+      _isSigningUp = true;
+    });
+
     String username = _usernameController.text;
     String email = _emailController.text;
     String name = _nameController.text;
@@ -121,11 +130,15 @@ class _SignUpPageState extends State<SignUpPage> {
 
     User? user = await _auth.signUpWithEmailAndPassword(email, password);
 
+    setState(() {
+      _isSigningUp=false;
+    });
+
     if(user != null){
-      print("User is successfully created");
+      showToast(message: "User is successfully created");
       Navigator.pushNamed(context, "/home");
     } else{
-      print("Error occurred");
+      showToast(message: "Error occurred");
  }
 
   }
