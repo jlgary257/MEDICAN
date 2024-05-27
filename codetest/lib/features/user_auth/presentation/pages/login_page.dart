@@ -182,7 +182,7 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.pushNamed(context, "/home");
       }
     } catch (e) {
-      print( "Error occurred: ${e}");
+      showToast(message: "Error occurred: ${e}");
     }
   }
 }
