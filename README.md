@@ -9,3 +9,4 @@ MEDICAN
 - Firebase
 - Python
 - VS code
+- Android Studio
