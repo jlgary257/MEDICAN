@@ -64,9 +64,19 @@
                   children: doctors!.map((Doctor) {
                     return ListTile(
                       leading: GestureDetector(
+                        onTap: (){
+                          _deleteData(Doctor.id!);
+                        },
                         child: Icon(Icons.delete),
                       ),
                       trailing: GestureDetector(
+                        onTap: (){
+                          _updateData(UserModel(
+                            id: Doctor.id,
+                            username: "John Wick",
+                            address: "Malaysia",
+                          ));
+                        },
                         child: Icon(Icons.update),
                       ),
                       title: Text(Doctor.username!),
@@ -120,6 +130,27 @@
 
       userCollection.doc(id).set(newUser);
     }
+
+  void _updateData(UserModel userModel) {
+    final userCollection = FirebaseFirestore.instance.collection("Doctor");
+
+    final newData = UserModel(
+      username: userModel.username,
+      id: userModel.id,
+      address: userModel.address,
+      age: userModel.age,
+    ).toJson();
+
+    userCollection.doc(userModel.id).update(newData);
+
+  }
+
+  void _deleteData(String id) {
+    final userCollection = FirebaseFirestore.instance.collection("Doctor");
+
+    userCollection.doc(id).delete();
+
+  }
 
   }
 
