@@ -15,8 +15,7 @@
     Widget build(BuildContext context) {
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.red,
-          title: Text("HomePage"),
+          title: Text("Home"),
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -68,7 +67,7 @@
                           _deleteData(Doctor.id!);
                         },
                         child: Icon(Icons.delete),
-                      ),
+                      ),//delete
                       trailing: GestureDetector(
                         onTap: (){
                           _updateData(UserModel(
@@ -78,7 +77,7 @@
                           ));
                         },
                         child: Icon(Icons.update),
-                      ),
+                      ),//update
                       title: Text(Doctor.username!),
                       subtitle: Text(Doctor.address!),
                     );

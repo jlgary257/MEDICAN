@@ -35,8 +35,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Login"),
-        backgroundColor: Colors.red,
+        title: Text("MEDICAN",style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold))
+
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 300),
@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             Text(
               "Login",
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             SizedBox(
               height: 30,
