@@ -138,8 +138,7 @@ class _SignUpPageState extends State<SignUpPage> {
     final newDoctor = DoctorModel(
       name: name,
       email: email,
-      password: password,
-      id: id,
+      DoctorId: id,
     ).toJson();
 
     doctorCollection.doc(id).set(newDoctor);
@@ -162,10 +161,9 @@ class _SignUpPageState extends State<SignUpPage> {
 class DoctorModel {
   final String? name;
   final String? email;
-  final String? password;
-  final String? id;
+  final String? DoctorId;
 
-  DoctorModel({this.name, this.email, this.password, this.id});
+  DoctorModel({this.name, this.email, this.DoctorId});
 
 
   static DoctorModel fromSnapshot(
@@ -173,8 +171,7 @@ class DoctorModel {
     return DoctorModel(
       name: snapshot['name'],
       email: snapshot['email'],
-      password: snapshot['password'],
-      id: snapshot['id'],
+      DoctorId: snapshot['DoctorId'],
     );
   }
 
@@ -182,8 +179,7 @@ class DoctorModel {
     return {
       "name": name,
       "email": email,
-      "password": password,
-      "id": id,
+      "DoctorId": DoctorId,
     };
   }
 

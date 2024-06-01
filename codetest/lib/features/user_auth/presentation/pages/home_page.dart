@@ -20,29 +20,6 @@
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            GestureDetector(
-              onTap: () {
-                _createData(DoctorModel(
-                  name: "Jane",
-                    email: "India",
-                    password: "123456"
-                ));
-
-              },
-              child: Container(
-                height: 45,
-                width: 100,
-                decoration: BoxDecoration(
-                    color: Colors.red, borderRadius: BorderRadius.circular(10)),
-                child: Center(
-                  child: Text(
-                    "Create Data",
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-            ),
             Center(
                 child: Text("Welcome to MEDICAN Home",
                     style: TextStyle(
@@ -110,25 +87,12 @@
       );
     }
     Stream<List<DoctorModel>> _readData(){
-      final userCollection = FirebaseFirestore.instance.collection("Doctor");
-
-      return userCollection.snapshots().map((qureySnapshot) => qureySnapshot.docs.map((e) => DoctorModel.fromSnapshot(e),).toList());
-  }
-
-    void _createData(DoctorModel doctorModel) {
       final doctorCollection = FirebaseFirestore.instance.collection("Doctor");
 
-      String id =doctorCollection.doc().id;
+      return doctorCollection.snapshots().map((qureySnapshot) => qureySnapshot.docs.map((e) => DoctorModel.fromSnapshot(e),).toList());
+  }
 
-      final newUser = DoctorModel(
-        name: doctorModel.name,
-        email: doctorModel.email,
-        password: doctorModel.password,
-        id: id,
-      ).toJson();
 
-      doctorCollection.doc(id).set(newUser);
-    }
 
   void _updateData(DoctorModel doctorModel) {
     final doctorCollection = FirebaseFirestore.instance.collection("Doctor");
@@ -136,7 +100,6 @@
     final newDoctor = DoctorModel(
       name: doctorModel.name,
       email: doctorModel.email,
-      password: doctorModel.password,
       id: doctorModel.id,
     ).toJson();
 
@@ -156,10 +119,10 @@
   class DoctorModel {
     final String? name;
     final String? email;
-    final String? password;
+
     final String? id;
 
-    DoctorModel({this.name, this.email, this.password, this.id});
+    DoctorModel({this.name, this.email, this.id});
 
 
     static DoctorModel fromSnapshot(
@@ -167,8 +130,7 @@
       return DoctorModel(
         name: snapshot['name'],
         email: snapshot['email'],
-        password: snapshot['password'],
-        id: snapshot['id'],
+        id: snapshot['DoctorId'],
       );
     }
 
@@ -176,8 +138,7 @@
       return {
         "name": name,
         "email": email,
-        "password": password,
-        "id": id,
+        "DoctorId": id,
       };
     }
 
