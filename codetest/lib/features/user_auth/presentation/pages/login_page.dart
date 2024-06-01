@@ -4,7 +4,6 @@ import 'package:codetest/features/user_auth/presentation/pages/signUpPage.dart';
 import 'package:codetest/features/user_auth/presentation/widgets/form_container_widget.dart';
 import 'package:codetest/global/toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';

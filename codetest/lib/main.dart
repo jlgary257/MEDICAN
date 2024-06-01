@@ -1,3 +1,4 @@
+import 'package:codetest/Admin/home_admin.dart';
 import 'package:codetest/features/user_auth/presentation/pages/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => SplashScreen(
           // Here, you can decide whether to show the LoginPage or HomePage based on user authentication
-          child: LoginPage(),
+          child: LoginPage()
         ),
         '/login': (context) => LoginPage(),
         '/signUp': (context) => SignUpPage(),
@@ -42,61 +43,4 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  final String title;
 
-  MyHomePage({Key? key, required this.title}) : super(key: key); // Constructor
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  final username = TextEditingController();
-  final password = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title,
-            style: const TextStyle(
-                color: Colors.red,
-                fontSize: 30.0,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Roboto')), // Access title passed from MyApp
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment:
-              MainAxisAlignment.center, // Align content vertically
-          children: <Widget>[
-            TextField(
-              controller: username,
-              decoration: const InputDecoration(labelText: 'Username'),
-            ),
-            SizedBox(height: 20.0),
-            TextField(
-              controller: password,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Username: ' +
-                      username.text +
-                      '\nPassword: ' +
-                      password.text),
-                  backgroundColor: Colors.green,
-                ));
-              },
-              child: const Text('Login'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

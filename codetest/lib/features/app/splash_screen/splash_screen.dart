@@ -1,3 +1,4 @@
+import 'package:codetest/Admin/home_admin.dart';
 import 'package:codetest/features/user_auth/presentation/pages/login_page.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(Duration(seconds: 3), (){
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
+        MaterialPageRoute(builder: (context) => homeAdmin()),
         ModalRoute.withName('/'), // Predicate to remove all routes
       );
     });
