@@ -41,14 +41,14 @@
                     return ListTile(
                       leading: GestureDetector(
                         onTap: (){
-                          _deleteData(Doctor.id!);
+                          _deleteData(Doctor.DoctorId!);
                         },
                         child: Icon(Icons.delete),
                       ),//delete
                       trailing: GestureDetector(
                         onTap: (){
                           _updateData(DoctorModel(
-                            id: Doctor.id,
+                            DoctorId: Doctor.DoctorId,
                             name: "John Wick",
                             email: "Malaysia",
                           ));
@@ -100,10 +100,11 @@
     final newDoctor = DoctorModel(
       name: doctorModel.name,
       email: doctorModel.email,
-      id: doctorModel.id,
+      DoctorId: doctorModel.DoctorId,
+      StaffId: "DR",
     ).toJson();
 
-    doctorCollection.doc(doctorModel.id).update(newDoctor);
+    doctorCollection.doc(doctorModel.DoctorId).update(newDoctor);
 
   }
 
@@ -119,10 +120,10 @@
   class DoctorModel {
     final String? name;
     final String? email;
+    final String? DoctorId;
+    final String? StaffId;
 
-    final String? id;
-
-    DoctorModel({this.name, this.email, this.id});
+    DoctorModel({this.name, this.email, this.DoctorId, this.StaffId});
 
 
     static DoctorModel fromSnapshot(
@@ -130,7 +131,8 @@
       return DoctorModel(
         name: snapshot['name'],
         email: snapshot['email'],
-        id: snapshot['DoctorId'],
+        DoctorId: snapshot['DoctorId'],
+        StaffId: snapshot['StaffId'],
       );
     }
 
@@ -138,7 +140,8 @@
       return {
         "name": name,
         "email": email,
-        "DoctorId": id,
+        "DoctorId": DoctorId,
+        "StaffId" : StaffId,
       };
     }
 
