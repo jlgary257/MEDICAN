@@ -21,7 +21,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
   final FirebaseAuthService _auth = FirebaseAuthService();
 
-  TextEditingController _usernameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -29,7 +28,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   void dispose() {
-    _usernameController.dispose();
     _emailController.dispose();
     _nameController.dispose();
     _passwordController.dispose();
@@ -55,7 +53,7 @@ class _SignUpPageState extends State<SignUpPage> {
               height: 50,
             ),
             FormContainerWidget(
-              controller: _usernameController,
+              controller: _nameController,
               hintText: "Name",
               isPasswordField: false,
             ),
@@ -77,7 +75,6 @@ class _SignUpPageState extends State<SignUpPage> {
             GestureDetector(
               onTap: () {
                 _signUp();
-               // _createDoctor();
               },
               child: Container(
                 width: double.infinity,
@@ -135,6 +132,18 @@ class _SignUpPageState extends State<SignUpPage> {
 
     User? user = await _auth.signUpWithEmailAndPassword(email, password);
 
+    final doctorCollection = FirebaseFirestore.instance.collection("Doctor");
+    String id = doctorCollection.doc().id;
+
+    final newDoctor = DoctorModel(
+      name: name,
+      email: email,
+      password: password,
+      id: id,
+    ).toJson();
+
+    doctorCollection.doc(id).set(newDoctor);
+
     setState(() {
       _isSigningUp = false;
     });
@@ -147,5 +156,36 @@ class _SignUpPageState extends State<SignUpPage> {
     }
 
   }
+}
+
+//class Doctor Model
+class DoctorModel {
+  final String? name;
+  final String? email;
+  final String? password;
+  final String? id;
+
+  DoctorModel({this.name, this.email, this.password, this.id});
+
+
+  static DoctorModel fromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    return DoctorModel(
+      name: snapshot['name'],
+      email: snapshot['email'],
+      password: snapshot['password'],
+      id: snapshot['id'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "name": name,
+      "email": email,
+      "password": password,
+      "id": id,
+    };
+  }
+
 }
 

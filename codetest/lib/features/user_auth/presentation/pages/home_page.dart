@@ -22,10 +22,10 @@
           children: [
             GestureDetector(
               onTap: () {
-                _createData(UserModel(
-                  username: "Jane",
-                    address: "India",
-                    age: 60
+                _createData(DoctorModel(
+                  name: "Jane",
+                    email: "India",
+                    password: "123456"
                 ));
 
               },
@@ -49,7 +49,7 @@
                       fontWeight: FontWeight.bold,
                     ))),
             SizedBox(height: 30),
-            StreamBuilder<List<UserModel>>(
+            StreamBuilder<List<DoctorModel>>(
               stream:  _readData(),
               builder: (context, snapshot) {
                 if(snapshot.connectionState == ConnectionState.waiting){
@@ -70,16 +70,16 @@
                       ),//delete
                       trailing: GestureDetector(
                         onTap: (){
-                          _updateData(UserModel(
+                          _updateData(DoctorModel(
                             id: Doctor.id,
-                            username: "John Wick",
-                            address: "Malaysia",
+                            name: "John Wick",
+                            email: "Malaysia",
                           ));
                         },
                         child: Icon(Icons.update),
                       ),//update
-                      title: Text(Doctor.username!),
-                      subtitle: Text(Doctor.address!),
+                      title: Text(Doctor.name!),
+                      subtitle: Text(Doctor.email!),
                     );
                   } ).toList()
                 ),);
@@ -109,38 +109,38 @@
         ),
       );
     }
-    Stream<List<UserModel>> _readData(){
+    Stream<List<DoctorModel>> _readData(){
       final userCollection = FirebaseFirestore.instance.collection("Doctor");
 
-      return userCollection.snapshots().map((qureySnapshot) => qureySnapshot.docs.map((e) => UserModel.fromSnapshot(e),).toList());
+      return userCollection.snapshots().map((qureySnapshot) => qureySnapshot.docs.map((e) => DoctorModel.fromSnapshot(e),).toList());
   }
 
-    void _createData(UserModel userModel) {
-      final userCollection = FirebaseFirestore.instance.collection("Doctor");
+    void _createData(DoctorModel doctorModel) {
+      final doctorCollection = FirebaseFirestore.instance.collection("Doctor");
 
-      String id =userCollection.doc().id;
+      String id =doctorCollection.doc().id;
 
-      final newUser = UserModel(
-        username: userModel.username,
-        address: userModel.address,
-        age: userModel.age,
+      final newUser = DoctorModel(
+        name: doctorModel.name,
+        email: doctorModel.email,
+        password: doctorModel.password,
         id: id,
       ).toJson();
 
-      userCollection.doc(id).set(newUser);
+      doctorCollection.doc(id).set(newUser);
     }
 
-  void _updateData(UserModel userModel) {
-    final userCollection = FirebaseFirestore.instance.collection("Doctor");
+  void _updateData(DoctorModel doctorModel) {
+    final doctorCollection = FirebaseFirestore.instance.collection("Doctor");
 
-    final newData = UserModel(
-      username: userModel.username,
-      id: userModel.id,
-      address: userModel.address,
-      age: userModel.age,
+    final newDoctor = DoctorModel(
+      name: doctorModel.name,
+      email: doctorModel.email,
+      password: doctorModel.password,
+      id: doctorModel.id,
     ).toJson();
 
-    userCollection.doc(userModel.id).update(newData);
+    doctorCollection.doc(doctorModel.id).update(newDoctor);
 
   }
 
@@ -153,30 +153,32 @@
 
   }
 
-  class UserModel {
-    final String? username;
-    final String? address;
-    final int? age;
+  class DoctorModel {
+    final String? name;
+    final String? email;
+    final String? password;
     final String? id;
 
-    UserModel({this.id, this.username, this.address, this.age});
+    DoctorModel({this.name, this.email, this.password, this.id});
 
-    static UserModel fromSnapshot(
+
+    static DoctorModel fromSnapshot(
         DocumentSnapshot<Map<String, dynamic>> snapshot) {
-      return UserModel(
-        username: snapshot['username'],
-        address: snapshot['address'],
-        age: snapshot['age'],
+      return DoctorModel(
+        name: snapshot['name'],
+        email: snapshot['email'],
+        password: snapshot['password'],
         id: snapshot['id'],
       );
     }
 
     Map<String, dynamic> toJson() {
       return {
-        "username": username,
-        "age": age,
+        "name": name,
+        "email": email,
+        "password": password,
         "id": id,
-        "address": address,
       };
     }
+
   }
