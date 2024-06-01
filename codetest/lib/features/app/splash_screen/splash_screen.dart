@@ -31,8 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
               style: TextStyle(
                 color: Colors.red,
                 fontWeight: FontWeight.bold,
-                fontFamily: "Raleway",
-                fontSize: 20,
+                fontSize: 30,
               )),
         ));
   }
