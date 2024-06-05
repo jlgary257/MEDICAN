@@ -150,7 +150,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
     if (user != null) {
       showToast(message: "User is successfully created");
-      Navigator.pushNamed(context, "/home");
+      Navigator.pushNamed(context, "/homeDr");
     } else {
       showToast(message: "Error occurred");
     }

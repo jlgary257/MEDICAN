@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../features/user_auth/presentation/pages/login_page.dart';
 import '../global/toast.dart';
 
 class homeAdmin extends StatefulWidget {
@@ -23,7 +24,8 @@ class _homeAdminState extends State<homeAdmin> {
         actions: <Widget>[GestureDetector(
           onTap: () {
             FirebaseAuth.instance.signOut();
-            Navigator.pushNamed(context,"/login");
+            Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => LoginPage()),
+                    (route) => false);
             showToast(message: "Sign out successfully");
           },
           child: Container(

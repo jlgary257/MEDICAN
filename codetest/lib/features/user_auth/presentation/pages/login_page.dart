@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:codetest/Admin/home_admin.dart';
+import 'package:codetest/Doctor/home_dr.dart';
 import 'package:codetest/features/user_auth/firebase_auth_implementation/firebase_auth_services.dart';
 import 'package:codetest/features/user_auth/presentation/pages/home_page.dart';
 import 'package:codetest/features/user_auth/presentation/pages/signUpPage.dart';
@@ -147,7 +150,10 @@ class _LoginPageState extends State<LoginPage> {
     String email = _emailController.text;
     String password = _passwordController.text;
 
+
     User? user = await _auth.signinEmNPass(email, password);
+
+    String? staffId = await getStaffIdByEmail(email) ;
 
     setState(() {
       _isSigningIn = false;
@@ -155,7 +161,15 @@ class _LoginPageState extends State<LoginPage> {
 
     if (user != null) {
       showToast(message: "User is successfully Sign in");
-      Navigator.pushNamed(context, "/home");
+      if (staffId == "ADMIN") {
+        Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => homeAdmin()),
+                (route) => false);
+      } else if (staffId == "DR"){
+        Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => homeDoctor()),
+                (route) => false);
+      }else{
+        print("Error: " );
+      }
     } else {
       showToast(message: "Error occurred");
     }
@@ -165,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
     final GoogleSignIn _googleSignIn = GoogleSignIn(
       clientId: '1075732898430-hkg1grj1r0thfaqllsmli1v38m17uknd.apps.googleusercontent.com',
     );
-//clientId: '1075732898430-hkg1grj1r0thfaqllsmli1v38m17uknd.apps.googleusercontent.com',
+
     try {
       final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
 
@@ -185,4 +199,64 @@ class _LoginPageState extends State<LoginPage> {
       showToast(message: "Error occurred: ${e}");
     }
   }
+
+  Stream<List<DoctorModel>> _readData(){
+    final doctorCollection = FirebaseFirestore.instance.collection("Doctor");
+
+    return doctorCollection.snapshots().map((qureySnapshot) => qureySnapshot.docs.map((e) => DoctorModel.fromSnapshot(e),).toList());
+  }
+  
+  Future<String?> getStaffIdByEmail(String email) async {
+    final doctorCollection = FirebaseFirestore.instance.collection('Doctor');
+
+    try {
+      // Query doctors by email
+      final querySnapshot = await doctorCollection.where('email', isEqualTo: email).get();
+
+      // Get the first doctor document (assuming emails are unique)
+      final doctorDoc = querySnapshot.docs[0];
+      final doctorData = doctorDoc.data();
+
+      // Extract staff ID from the doctor data
+      if (doctorData['StaffId'] != null) {
+        return doctorData['StaffId'] as String;
+      } else {
+        return null; // Doctor ID not found in the data
+      }
+    } catch (error) {
+      print('Error getting staff ID: $error');
+      return null; // Handle potential errors
+    }
+  }
+
+}
+
+class DoctorModel {
+  final String? name;
+  final String? email;
+  final String? DoctorId;
+  final String? StaffId;
+
+  DoctorModel({this.name, this.email, this.DoctorId, this.StaffId});
+
+
+  static DoctorModel fromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    return DoctorModel(
+      name: snapshot['name'],
+      email: snapshot['email'],
+      DoctorId: snapshot['DoctorId'],
+      StaffId: snapshot['StaffId'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "name": name,
+      "email": email,
+      "DoctorId": DoctorId,
+      "StaffId" : StaffId,
+    };
+  }
+
 }
