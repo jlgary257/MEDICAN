@@ -38,7 +38,6 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginPage(),
         '/signUp': (context) => SignUpPage(),
         '/homeAd': (context) => homeAdmin(),
-        //added in main for testing-branches
       },
     );
   }
