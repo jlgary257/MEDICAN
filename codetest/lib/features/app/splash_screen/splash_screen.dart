@@ -18,8 +18,8 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(Duration(seconds: 3), (){
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
-        ModalRoute.withName('/'), // Predicate to remove all routes
+        MaterialPageRoute(builder: (context) => LoginPage(),),
+              (route) => false // Predicate to remove all routes
       );
     });
     super.initState();

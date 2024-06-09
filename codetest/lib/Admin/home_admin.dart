@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../features/user_auth/presentation/pages/login_page.dart';
+import '../features/user_auth/presentation/pages/signUpPage.dart';
 import '../global/toast.dart';
 
 class homeAdmin extends StatefulWidget {
@@ -49,6 +50,7 @@ class _homeAdminState extends State<homeAdmin> {
           Center(
             child: Text("View Doctor information",style: TextStyle(fontWeight: FontWeight.bold),),
           ),
+
           SizedBox(height:30),
           StreamBuilder<List<DoctorModel>>(
               stream:  _readData(),
@@ -86,7 +88,28 @@ class _homeAdminState extends State<homeAdmin> {
                   ),);
               }
           ),
+              Container(
+                width: 120,
+                height: 40,
+                decoration: BoxDecoration(
+                    color: Colors.red, borderRadius: BorderRadius.circular(20)),
+                child: Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SignUpPage()));
+                    },
+                    child: Text(
+                      "New Doctor",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ),
         ],
+
       ),
     );
   }

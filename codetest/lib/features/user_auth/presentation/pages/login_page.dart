@@ -116,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),*/
             SizedBox(height: 20),
-            Row(
+            /*Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("Don't have an account?"),
@@ -135,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 )
               ],
-            )
+            )*/
           ],
         ),
       ),

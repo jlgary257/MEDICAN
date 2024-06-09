@@ -95,7 +95,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
             ),
             SizedBox(height: 20),
-            Row(
+            /*Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("Already have an account?"),
@@ -114,7 +114,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 )
               ],
-            )
+            )*/
           ],
         ),
       ),
