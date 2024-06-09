@@ -38,7 +38,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("SignUp"),
+        title: Text("Home Administrator"),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 200),
@@ -46,7 +46,7 @@ class _SignUpPageState extends State<SignUpPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              "Sign Up",
+              "Create new Doctor",
               style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
             ),
             SizedBox(
