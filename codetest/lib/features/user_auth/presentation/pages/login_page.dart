@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             SizedBox(height: 10,),
-            GestureDetector(
+            /*GestureDetector(
               onTap: () {
                 _signInWithGoogle();
               },
@@ -114,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     )),
               ),
-            ),
+            ),*/
             SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
