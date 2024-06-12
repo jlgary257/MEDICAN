@@ -1,6 +1,7 @@
 
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:codetest/features/user_auth/presentation/widgets/form_container_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -19,31 +20,7 @@ class _homeAdminState extends State<homeAdmin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.red,
-        title: Text("HOME Administrator",style: TextStyle(color: Colors.white),),
-        actions: <Widget>[GestureDetector(
-          onTap: () {
-            FirebaseAuth.instance.signOut();
-            Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => LoginPage()),
-                    (route) => false);
-            showToast(message: "Sign out successfully");
-          },
-          child: Container(
-            height: 45,
-            width: 100,
-            decoration: BoxDecoration(
-                color: Colors.red, borderRadius: BorderRadius.circular(10)),
-            child: Center(
-              child: Text(
-                "Sign Out",
-                style: TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-        )],
-      ),
+      appBar: MainAppBar(title: "Home Admin",),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

@@ -37,9 +37,7 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Home Administrator"),
-      ),
+      appBar: MainAppBar(title: "Home Admin",),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 200),
         child: Column(

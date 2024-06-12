@@ -1,6 +1,10 @@
 
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../global/toast.dart';
+import '../pages/login_page.dart';
 
 
 class FormContainerWidget extends StatefulWidget {
@@ -75,4 +79,42 @@ class _FormContainerWidgetState extends State<FormContainerWidget> {
       ),
     );
   }
+}
+
+class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
+
+  MainAppBar({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.red,
+      title: Text(title,style: TextStyle(color: Colors.white),),
+      actions: <Widget>[GestureDetector(
+        onTap: () {
+          FirebaseAuth.instance.signOut();
+          Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => LoginPage()),
+                  (route) => false);
+          showToast(message: "Sign out successfully");
+        },
+        child: Container(
+          height: 45,
+          width: 100,
+          decoration: BoxDecoration(
+              color: Colors.red, borderRadius: BorderRadius.circular(10)),
+          child: Center(
+            child: Text(
+              "Sign Out",
+              style: TextStyle(
+                  color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+      )],
+    );
+  }
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
