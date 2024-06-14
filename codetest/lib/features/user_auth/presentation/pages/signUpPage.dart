@@ -48,7 +48,7 @@ class _SignUpPageState extends State<SignUpPage> {
               style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
             ),
             SizedBox(
-              height: 50,
+              height: 30,
             ),
             FormContainerWidget(
               controller: _nameController,
