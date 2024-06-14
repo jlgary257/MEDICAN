@@ -151,6 +151,7 @@ class _SignUpPageState extends State<SignUpPage> {
       Navigator.pushNamed(context, "/homeDr");
     } else {
       showToast(message: "Error occurred");
+
     }
 
   }

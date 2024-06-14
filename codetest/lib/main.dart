@@ -1,4 +1,5 @@
 import 'package:codetest/Admin/home_admin.dart';
+import 'package:codetest/Doctor/home_dr.dart';
 import 'package:codetest/features/user_auth/presentation/pages/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginPage(),
         '/signUp': (context) => SignUpPage(),
         '/homeAd': (context) => homeAdmin(),
+        '/homeDr': (context) => homeDoctor(),
       },
     );
   }
