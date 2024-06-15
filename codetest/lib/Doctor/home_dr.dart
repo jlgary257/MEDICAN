@@ -32,24 +32,11 @@ class _homeDoctorState extends State<homeDoctor> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text("Welcome Dr.",style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-              SizedBox(
-                width: 200,
-                height: 60,
-                child: ElevatedButton( style: ElevatedButton.styleFrom(backgroundColor: Colors.red,padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),),
-                    onPressed: (){
-                    Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DrForm()));
-                    },
-                  child:  Center(
-                      child : Text(
-                        "Diagnose Patient",
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-              ),
+              RedElevatedButton(onPressed:(){
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DrForm()));
+                  }   , text: "Diagnose Patient")
             ],
           ),
         ),
