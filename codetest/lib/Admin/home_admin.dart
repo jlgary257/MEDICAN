@@ -27,7 +27,6 @@ class _homeAdminState extends State<homeAdmin> {
           Center(
             child: Text("View Doctor information",style: TextStyle(fontWeight: FontWeight.bold),),
           ),
-
           SizedBox(height:30),
           StreamBuilder<List<DoctorModel>>(
               stream:  _readData(),
@@ -148,5 +147,7 @@ class DoctorModel {
       "StaffId" : StaffId,
     };
   }
+
+
 
 }
