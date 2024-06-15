@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:codetest/Doctor/home_dr.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../features/user_auth/presentation/widgets/form_container_widget.dart';
@@ -66,11 +67,7 @@ class _DrFormState extends State<DrForm> {
             SizedBox(height: 30),
             GestureDetector(
               onTap: () {
-                try {
                   _addPatientData();
-                } on Exception catch (e) {
-                  print(e);
-                }
               },
               child: Container(
                 width: double.infinity,
@@ -101,8 +98,8 @@ class _DrFormState extends State<DrForm> {
     String patientID = _patController.text;
 
     final DateTime now = DateTime.now();
-    String formattedDate = DateFormat('dd-MM-yyyy').format(now);
-    String formattedTime = DateFormat('HH:mmm:ss').format(now);
+    String formattedDate = DateFormat('dd-MMM-yyyy').format(now);
+    String formattedTime = DateFormat('HH:mm:ss').format(now);
 
     final admissionCollection = FirebaseFirestore.instance.collection("Admission");
     String id = admissionCollection.doc().id;
@@ -118,7 +115,17 @@ class _DrFormState extends State<DrForm> {
       PatientID: patientID,
     ).toJson();
 
-    await admissionCollection.doc(id).set(newAdmission);
+    try {
+          await admissionCollection.doc(id).set(newAdmission);
+
+          if (newAdmission != null){
+            showToast(message: "Added Admission successfully");
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => homeDoctor()),(route) => false);
+          }
+
+    } on Exception catch (e) {
+      print("Error :  ${e}");
+    }
   }
 }
 

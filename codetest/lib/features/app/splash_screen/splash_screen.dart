@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(Duration(seconds: 3), (){
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => LoginPage(),),
+        MaterialPageRoute(builder: (context) => homeDoctor(),),
               (route) => false // Predicate to remove all routes
       );
     });

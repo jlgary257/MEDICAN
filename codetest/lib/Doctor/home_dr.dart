@@ -5,6 +5,7 @@
 
 import 'package:codetest/Doctor/form_consult.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../features/user_auth/presentation/pages/login_page.dart';
@@ -26,31 +27,31 @@ class _homeDoctorState extends State<homeDoctor> {
       appBar: MainAppBar(title: "Home Doctor",),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Welcome Dr.",style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-            ElevatedButton(
-                onPressed: (){
-                Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DrForm()));
-                },
-              child: Container(
-                width: 500,
-                height: 45,
-                decoration: BoxDecoration(
-                    color: Colors.red, borderRadius: BorderRadius.circular(10)),
-                child: Center(
-                  child : Text(
-                    "Diagnose Patient",
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Welcome Dr.",style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+              SizedBox(
+                width: 200,
+                height: 60,
+                child: ElevatedButton( style: ElevatedButton.styleFrom(backgroundColor: Colors.red,padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),),
+                    onPressed: (){
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DrForm()));
+                    },
+                  child:  Center(
+                      child : Text(
+                        "Diagnose Patient",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   ),
-                ),
               ),
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );
