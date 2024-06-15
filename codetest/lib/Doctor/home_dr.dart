@@ -4,6 +4,7 @@
 
 
 import 'package:codetest/Doctor/form_consult.dart';
+import 'package:codetest/Doctor/patient_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +37,19 @@ class _homeDoctorState extends State<homeDoctor> {
                   Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => DrForm()));
-                  }   , text: "Diagnose Patient")
+                  }   , text: "Diagnose Patient"),
+              SizedBox(height: 10,),
+              RedElevatedButton(onPressed:(){
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => viewPatientInfo()));
+                  }   , text: "View Patient Information"),
+              SizedBox(height: 10,),
+              RedElevatedButton(onPressed:(){
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => viewPatientInfo()));
+                  }   , text: "Update Information")
             ],
           ),
         ),
