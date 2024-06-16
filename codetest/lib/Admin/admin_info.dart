@@ -1,6 +1,7 @@
 
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:codetest/Admin/home_admin.dart';
 import 'package:codetest/features/user_auth/firebase_auth_implementation/firebase_auth_services.dart';
 import 'package:codetest/features/user_auth/presentation/widgets/form_container_widget.dart';
 import 'package:codetest/global/toast.dart';
@@ -79,7 +80,7 @@ class _AddAdminDataState extends State<AddAdminData> {
                     color: Colors.white,
                   )
                       : Text(
-                    "Sign Up",
+                    "Create Admin",
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),
@@ -144,7 +145,8 @@ class _AddAdminDataState extends State<AddAdminData> {
 
     if (user != null) {
       showToast(message: "Administrator is successfully created");
-      Navigator.pushNamed(context, "/homeAd");
+      Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => homeAdmin()),
+              (route) => false);
     } else {
       showToast(message: "Error occurred");
     }

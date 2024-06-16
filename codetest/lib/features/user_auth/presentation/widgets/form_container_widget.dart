@@ -132,13 +132,13 @@ class RedElevatedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
+    return Container(
+      width: 250,
       height: 60,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.red,
-          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+          //padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),

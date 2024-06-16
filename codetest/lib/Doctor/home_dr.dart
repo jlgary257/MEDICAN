@@ -5,6 +5,7 @@
 
 import 'package:codetest/Doctor/form_consult.dart';
 import 'package:codetest/Doctor/patient_info.dart';
+import 'package:codetest/features/user_auth/firebase_auth_implementation/password_change.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,13 @@ class _homeDoctorState extends State<homeDoctor> {
                   Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => UpdatePatientInfo(documentId: "06kifAuy9WP7ZZchOG0y")));
-                  }   , text: "Update Information")
+                  }   , text: "Update Information"),
+              SizedBox(height: 10,),
+              RedElevatedButton(onPressed:(){
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ChangePasswordScreen()));
+                  }   , text: "Change Password")
             ],
           ),
         ),

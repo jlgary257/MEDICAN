@@ -161,10 +161,10 @@ class _LoginPageState extends State<LoginPage> {
 
     if (user != null) {
       showToast(message: "User is successfully Sign in");
-      if (staffId == "ADMIN") {
+      if (staffId == "1") {
         Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => homeAdmin()),
                 (route) => false);
-      } else if (staffId == "DR"){
+      } else if (staffId == "2"){
         Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => homeDoctor()),
                 (route) => false);
       }else{
@@ -201,28 +201,30 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Stream<List<DoctorModel>> _readData(){
-    final doctorCollection = FirebaseFirestore.instance.collection("Doctor");
+    final doctorCollection = FirebaseFirestore.instance.collection("Staff").doc("2").collection("Doctor");
 
     return doctorCollection.snapshots().map((qureySnapshot) => qureySnapshot.docs.map((e) => DoctorModel.fromSnapshot(e),).toList());
   }
-  
+
   Future<String?> getStaffIdByEmail(String email) async {
-    final doctorCollection = FirebaseFirestore.instance.collection('Doctor');
-
     try {
-      // Query doctors by email
-      final querySnapshot = await doctorCollection.where('email', isEqualTo: email).get();
+      // Check in the Doctor collection
+      final doctorCollection = FirebaseFirestore.instance.collection("Staff").doc("2").collection("Doctor");
+      final doctorQuerySnapshot = await doctorCollection.where('email', isEqualTo: email).get();
 
-      // Get the first doctor document (assuming emails are unique)
-      final doctorDoc = querySnapshot.docs[0];
-      final doctorData = doctorDoc.data();
-
-      // Extract staff ID from the doctor data
-      if (doctorData['StaffId'] != null) {
-        return doctorData['StaffId'] as String;
-      } else {
-        return null; // Doctor ID not found in the data
+      if (doctorQuerySnapshot.docs.isNotEmpty) {
+        return doctorQuerySnapshot.docs[0]['StaffId'] as String;
       }
+
+      // Check in the Admin collection
+      final adminCollection = FirebaseFirestore.instance.collection("Staff").doc("1").collection("Admin");
+      final adminQuerySnapshot = await adminCollection.where('email', isEqualTo: email).get();
+
+      if (adminQuerySnapshot.docs.isNotEmpty) {
+        return adminQuerySnapshot.docs[0]['StaffId'] as String;
+      }
+
+      return null; // Staff ID not found
     } catch (error) {
       print('Error getting staff ID: $error');
       return null; // Handle potential errors
@@ -255,6 +257,35 @@ class DoctorModel {
       "name": name,
       "email": email,
       "DoctorId": DoctorId,
+      "StaffId" : StaffId,
+    };
+  }
+
+}
+class AdminModel {
+  final String? name;
+  final String? email;
+  final String? AdminId;
+  final String? StaffId;
+
+  AdminModel({this.name, this.email, this.AdminId, this.StaffId});
+
+
+  static AdminModel fromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    return AdminModel(
+      name: snapshot['name'],
+      email: snapshot['email'],
+      AdminId: snapshot['AdminId'],
+      StaffId: snapshot['StaffId'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "name": name,
+      "email": email,
+      "AdminId": AdminId,
       "StaffId" : StaffId,
     };
   }

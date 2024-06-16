@@ -112,7 +112,7 @@ class _homeAdminState extends State<homeAdmin> {
     );
   }
   Stream<List<DoctorModel>> _readData(){
-    final doctorCollection = FirebaseFirestore.instance.collection("Doctor");
+    final doctorCollection = FirebaseFirestore.instance.collection("Staff").doc("2").collection("Doctor");
 
     return doctorCollection.snapshots().map((qureySnapshot) => qureySnapshot.docs.map((e) => DoctorModel.fromSnapshot(e),).toList());
   }
@@ -134,7 +134,7 @@ class _homeAdminState extends State<homeAdmin> {
   }
 
   void _deleteData(String id) {
-    final userCollection = FirebaseFirestore.instance.collection("Doctor");
+    final userCollection = FirebaseFirestore.instance.collection("Staff").doc("2").collection("Doctor");
 
     userCollection.doc(id).delete();
 

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:codetest/Admin/home_admin.dart';
 import 'package:codetest/features/user_auth/firebase_auth_implementation/firebase_auth_services.dart';
 import 'package:codetest/features/user_auth/presentation/pages/home_page.dart';
 import 'package:codetest/features/user_auth/presentation/pages/login_page.dart';
@@ -85,7 +86,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     color: Colors.white,
                   )
                       : Text(
-                    "Sign Up",
+                    "Create Doctor",
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),
@@ -127,10 +128,11 @@ class _SignUpPageState extends State<SignUpPage> {
     String email = _emailController.text;
     String name = _nameController.text;
     String password = _passwordController.text;
+    String? staffID ="2";
 
     User? user = await _auth.signUpWithEmailAndPassword(email, password);
 
-    final staffDocRef = FirebaseFirestore.instance.collection("Staff").doc("2");
+    final staffDocRef = FirebaseFirestore.instance.collection("Staff").doc(staffID);
 
     final doctorDocRef = staffDocRef.collection("Doctor").doc();
 
@@ -139,7 +141,7 @@ class _SignUpPageState extends State<SignUpPage> {
       name: name,
       email: email,
       DoctorId: doctorDocRef.id,
-      StaffId: "DR",
+      StaffId: staffID,
     ).toJson();
 
     // Adding the doctor information to the 'doctor' subcollection
@@ -151,7 +153,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
     if (user != null) {
       showToast(message: "User is successfully created");
-      Navigator.pushNamed(context, "/homeAd");
+      Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => homeAdmin()),
+              (route) => false);
     } else {
       showToast(message: "Error occurred");
     }
