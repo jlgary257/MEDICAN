@@ -1,31 +1,26 @@
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codetest/features/user_auth/firebase_auth_implementation/firebase_auth_services.dart';
-import 'package:codetest/features/user_auth/presentation/pages/home_page.dart';
-import 'package:codetest/features/user_auth/presentation/pages/login_page.dart';
 import 'package:codetest/features/user_auth/presentation/widgets/form_container_widget.dart';
 import 'package:codetest/global/toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../firebase_auth_implementation/firebase_auth_services.dart';
-
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+class AddAdminData extends StatefulWidget {
+  const AddAdminData({super.key});
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<AddAdminData> createState() => _AddAdminDataState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _AddAdminDataState extends State<AddAdminData> {
   bool _isSigningUp = false;
 
   final FirebaseAuthService _auth = FirebaseAuthService();
-
   TextEditingController _emailController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-
-
   @override
   void dispose() {
     _emailController.dispose();
@@ -33,8 +28,7 @@ class _SignUpPageState extends State<SignUpPage> {
     _passwordController.dispose();
     super.dispose();
   }
-
-  @override
+  
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainAppBar(title: "Home Admin",),
@@ -44,7 +38,7 @@ class _SignUpPageState extends State<SignUpPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              "Create new Doctor",
+              "Create new Admin",
               style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
             ),
             SizedBox(
@@ -72,7 +66,7 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             GestureDetector(
               onTap: () {
-                _signUp();
+                _createAdmin();
               },
               child: Container(
                 width: double.infinity,
@@ -118,8 +112,7 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
     );
   }
-
-  void _signUp() async {
+  void _createAdmin() async{
     setState(() {
       _isSigningUp = true;
     });
@@ -127,53 +120,53 @@ class _SignUpPageState extends State<SignUpPage> {
     String email = _emailController.text;
     String name = _nameController.text;
     String password = _passwordController.text;
-
+    String staffId = "1";
     User? user = await _auth.signUpWithEmailAndPassword(email, password);
 
-    final staffDocRef = FirebaseFirestore.instance.collection("Staff").doc("2");
+    final staffDocRef = FirebaseFirestore.instance.collection("Staff").doc(staffId);
 
-    final doctorDocRef = staffDocRef.collection("Doctor").doc();
+    final adminDoc = staffDocRef.collection("Admin").doc();
 
     // Creating the new doctor model
-    final newDoctor = DoctorModel(
+    final newAdmin = AdminModel(
       name: name,
       email: email,
-      DoctorId: doctorDocRef.id,
-      StaffId: "DR",
+      AdminId: adminDoc.id,
+      StaffId: staffId,
     ).toJson();
 
     // Adding the doctor information to the 'doctor' subcollection
-    await doctorDocRef.set(newDoctor);
+    await adminDoc.set(newAdmin);
 
     setState(() {
       _isSigningUp = false;
     });
 
     if (user != null) {
-      showToast(message: "User is successfully created");
+      showToast(message: "Administrator is successfully created");
       Navigator.pushNamed(context, "/homeAd");
     } else {
       showToast(message: "Error occurred");
     }
   }
+
 }
 
-//class Doctor Model
-class DoctorModel {
+class AdminModel {
   final String? name;
   final String? email;
-  final String? DoctorId;
+  final String? AdminId;
   final String? StaffId;
 
-  DoctorModel({this.name, this.email, this.DoctorId, this.StaffId});
+  AdminModel({this.name, this.email, this.AdminId, this.StaffId});
 
 
-  static DoctorModel fromSnapshot(
+  static AdminModel fromSnapshot(
       DocumentSnapshot<Map<String, dynamic>> snapshot) {
-    return DoctorModel(
+    return AdminModel(
       name: snapshot['name'],
       email: snapshot['email'],
-      DoctorId: snapshot['DoctorId'],
+      AdminId: snapshot['AdminId'],
       StaffId: snapshot['StaffId'],
     );
   }
@@ -182,10 +175,9 @@ class DoctorModel {
     return {
       "name": name,
       "email": email,
-      "DoctorId": DoctorId,
+      "AdminId": AdminId,
       "StaffId" : StaffId,
     };
   }
 
 }
-

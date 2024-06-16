@@ -33,6 +33,7 @@ class _homeDoctorState extends State<homeDoctor> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text("Welcome Dr.",style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+              SizedBox(height: 50,),
               RedElevatedButton(onPressed:(){
                   Navigator.push(
                   context,
@@ -48,7 +49,7 @@ class _homeDoctorState extends State<homeDoctor> {
               RedElevatedButton(onPressed:(){
                   Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => viewPatientInfo()));
+                  MaterialPageRoute(builder: (context) => UpdatePatientInfo(documentId: "06kifAuy9WP7ZZchOG0y")));
                   }   , text: "Update Information")
             ],
           ),

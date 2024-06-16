@@ -1,6 +1,7 @@
 
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:codetest/Admin/admin_info.dart';
 import 'package:codetest/features/user_auth/presentation/widgets/form_container_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -84,6 +85,27 @@ class _homeAdminState extends State<homeAdmin> {
                   ),
                 ),
               ),
+              SizedBox(height: 10,),
+              Container(
+                width: 120,
+                height: 40,
+                decoration: BoxDecoration(
+                    color: Colors.red, borderRadius: BorderRadius.circular(20)),
+                child: Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AddAdminData()));
+                    },
+                    child: Text(
+                      "New Admin",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ),
         ],
 
       ),
@@ -147,7 +169,4 @@ class DoctorModel {
       "StaffId" : StaffId,
     };
   }
-
-
-
 }
