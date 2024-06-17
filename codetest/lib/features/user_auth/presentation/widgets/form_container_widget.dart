@@ -91,27 +91,35 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: Colors.red,
       title: Text(title,style: TextStyle(color: Colors.white),),
-      actions: <Widget>[GestureDetector(
-        onTap: () {
-          FirebaseAuth.instance.signOut();
-          Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => LoginPage()),
-                  (route) => false);
-          showToast(message: "Sign out successfully");
-        },
-        child: Container(
-          height: 45,
-          width: 100,
-          decoration: BoxDecoration(
-              color: Colors.red, borderRadius: BorderRadius.circular(10)),
-          child: Center(
-            child: Text(
-              "Sign Out",
-              style: TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold),
+      actions: <Widget>[
+        ElevatedButton(
+          onPressed: () {
+            FirebaseAuth.instance.signOut();
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()),
+                  (route) => false,
+            );
+            showToast(message: "Sign out successfully");
+          },
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.white, backgroundColor: Colors.red,
+            minimumSize: Size(100, 45),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
             ),
           ),
+          child: Row(
+            children: [
+              Icon(Icons.logout, color: Colors.white),
+              SizedBox(width: 10.0), // Add spacing between icon and text
+              Text("Sign out"),
+            ],
+          ),
+
         ),
-      )],
+      ],
+
     );
   }
 

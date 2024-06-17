@@ -5,6 +5,7 @@ import 'package:codetest/features/user_auth/firebase_auth_implementation/passwor
 import 'package:codetest/features/user_auth/presentation/pages/login_page.dart';
 import 'package:codetest/features/user_auth/presentation/widgets/basic_fx.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class SplashScreen extends StatefulWidget {
   final Widget? child;
@@ -37,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 color: Colors.red,
                 fontWeight: FontWeight.bold,
                 fontSize: 30,
-              )),
+              )).animate().fade(duration: 500.ms),
         ));
   }
 }

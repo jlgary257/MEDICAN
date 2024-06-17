@@ -85,7 +85,7 @@ class _UpdatePatientInfoState extends State<UpdatePatientInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Home Dr")),
+      appBar: AppBar(title: Text("Home Doctor")),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 200),
         child: Column(

@@ -8,6 +8,8 @@ import 'package:codetest/features/user_auth/presentation/widgets/form_container_
 import 'package:codetest/global/toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/animation.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -37,8 +39,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("MEDICAN",style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold))
-
+        centerTitle: true,
+        title: Text("MEDICAN",style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold,fontSize: 40)).animate().fadeIn()
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 300),
