@@ -1,6 +1,3 @@
-
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codetest/Doctor/form_consult.dart';
 import 'package:codetest/features/user_auth/presentation/widgets/basic_fx.dart';
@@ -22,7 +19,6 @@ class _viewPatientInfoState extends State<viewPatientInfo> {
       body:  TabulateData()
     );
   }
-
 }
 
 class UpdatePatientInfo extends StatefulWidget {

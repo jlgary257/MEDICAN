@@ -24,7 +24,7 @@ class _DrFormState extends State<DrForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(title: "Home Dr"), // Keeping MainAppBar as requested
+      appBar: MainAppBar(title: "Home Doctor"), // Keeping MainAppBar as requested
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 200),
         child: Column(

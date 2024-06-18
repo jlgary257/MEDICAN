@@ -17,11 +17,13 @@ class homeDoctor extends StatefulWidget {
 
 class _homeDoctorState extends State<homeDoctor> {
   String? _doctorId;
+  String? _doctorName;
 
   @override
   void initState() {
     super.initState();
     _fetchDoctorId();
+    _fetchDoctorName();
   }
 
   Future<void> _fetchDoctorId() async {
@@ -31,6 +33,16 @@ class _homeDoctorState extends State<homeDoctor> {
       String? doctorId = await getDoctorIdByEmail(email);
       setState(() {
         _doctorId = doctorId;
+      });
+    }
+  }
+  Future<void> _fetchDoctorName() async {
+    String email = FirebaseAuth.instance.currentUser?.email ?? '';
+
+    if (email.isNotEmpty) {
+      String? doctorName = await getDoctorNameByEmail(email);
+      setState(() {
+        _doctorName = doctorName;
       });
     }
   }
@@ -45,7 +57,7 @@ class _homeDoctorState extends State<homeDoctor> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Welcome Dr.", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+              Text("Welcome Dr. ${_doctorName}", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
               SizedBox(height: 50),
               RedElevatedButton(
                 onPressed: () {
@@ -113,4 +125,21 @@ class _homeDoctorState extends State<homeDoctor> {
       return null; // Handle potential errors
     }
   }
+  Future<String?> getDoctorNameByEmail(String email) async {
+    print(email);
+    try {
+      final doctorCollection = FirebaseFirestore.instance.collection("Staff").doc("2").collection("Doctor");
+      final doctorQuerySnapshot = await doctorCollection.where('email', isEqualTo: email).get();
+
+      if (doctorQuerySnapshot.docs.isNotEmpty) {
+        return doctorQuerySnapshot.docs[0].data()['name'] as String;
+      }
+
+      return null; // Doctor name not found
+    } catch (error) {
+      print('Error getting doctor name: $error');
+      return null; // Handle potential errors
+    }
+  }
+
 }

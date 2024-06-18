@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codetest/Admin/admin_info.dart';
+import 'package:codetest/Patient/patient_info.dart';
 import 'package:codetest/features/user_auth/presentation/widgets/form_container_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -47,17 +48,7 @@ class _homeAdminState extends State<homeAdmin> {
                               _deleteData(Doctor.DoctorId!);
                             },
                             child: Icon(Icons.delete),
-                          ),//delete
-                          trailing: GestureDetector(
-                            onTap: (){
-                              _updateData(DoctorModel(
-                                DoctorId: Doctor.DoctorId,
-                                name: "John Wick",
-                                email: "Malaysia",
-                              ));
-                            },
-                            child: Icon(Icons.update),
-                          ),//update
+                          ),//delete//update
                           title: Text(Doctor.name!),
                           subtitle: Text(Doctor.email!),
                         );
@@ -65,49 +56,36 @@ class _homeAdminState extends State<homeAdmin> {
                   ),);
               }
           ),
-              Container(
-                width: 120,
-                height: 40,
-                decoration: BoxDecoration(
-                    color: Colors.red, borderRadius: BorderRadius.circular(20)),
-                child: Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => SignUpPage()));
-                    },
-                    child: Text(
-                      "New Doctor",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-              ),
+          RedElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SignUpPage()),
+              );
+            },
+            text: "New Doctor",
+          ),
               SizedBox(height: 10,),
-              Container(
-                width: 120,
-                height: 40,
-                decoration: BoxDecoration(
-                    color: Colors.red, borderRadius: BorderRadius.circular(20)),
-                child: Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => AddAdminData()));
-                    },
-                    child: Text(
-                      "New Admin",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
+          RedElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddAdminData()),
+              );
+            },
+            text: "New Admin",
+          ),
+            SizedBox(height: 10,),
+            RedElevatedButton(
+              onPressed: () {
+              Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => createPatient()),
+              );
+              },
+              text: "Patient",
               ),
-        ],
-
+]
       ),
     );
   }
