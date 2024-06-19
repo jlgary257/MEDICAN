@@ -107,7 +107,7 @@ class _createPatientState extends State<createPatient> {
       return;
     }
 
-    final patientCollection = FirebaseFirestore.instance.collection("Patient");
+    final patientCollection = FirebaseFirestore.instance.collection("Patients");
     String id = patientCollection.doc().id;
 
     final newPatient = PatientModel(
@@ -225,6 +225,7 @@ class _updatePatientState extends State<updatePatient> {
               SizedBox(height: 30),
               RedElevatedButton(onPressed: updatePatient, text: "Update"),
               SizedBox(height: 20),
+              RedElevatedButton(onPressed: () =>deletePatient(_patientID), text: "Delete")
             ]
           ],
         ),
@@ -240,13 +241,13 @@ class _updatePatientState extends State<updatePatient> {
       if (searchValue.length == 12) {
         // Search by IC
         snapshot = await FirebaseFirestore.instance
-            .collection("Patient")
+            .collection("Patients")
             .where('IC', isEqualTo: searchValue)
             .get();
       } else if (searchValue.length == 10) {
         // Search by Phone No
         snapshot = await FirebaseFirestore.instance
-            .collection("Patient")
+            .collection("Patients")
             .where('phoneNo', isEqualTo: searchValue)
             .get();
       } else {
@@ -288,7 +289,7 @@ class _updatePatientState extends State<updatePatient> {
       return;
     }
 
-    final patientCollection = FirebaseFirestore.instance.collection("Patient");
+    final patientCollection = FirebaseFirestore.instance.collection("Patients");
 
     final updatedPatient = PatientModel(
       ID: _patientID,
@@ -310,7 +311,23 @@ class _updatePatientState extends State<updatePatient> {
       print("Error: ${e}");
     }
   }
+
+  void deletePatient(String id) async {
+    try {
+      await FirebaseFirestore.instance.collection("Patients").doc(id).delete();
+      showToast(message: "Patient deleted successfully");
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => homeAdmin()),
+            (route) => false,
+      );
+    } on Exception catch (e) {
+      print("Error: ${e}");
+    }
+  }
 }
+
+
 
 class PatientModel {
   final String? ID;
