@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codetest/Admin/admin_info.dart';
 import 'package:codetest/Patient/Main_Patient.dart';
 import 'package:codetest/Patient/patient_info.dart';
+import 'package:codetest/features/user_auth/presentation/widgets/basic_fx.dart';
 import 'package:codetest/features/user_auth/presentation/widgets/form_container_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,9 @@ class _homeAdminState extends State<homeAdmin> {
                         return ListTile(
                           leading: GestureDetector(
                             onTap: (){
-                              _deleteData(Doctor.DoctorId!);
+                              showDeleteConfirmation(context, () {
+                                _deleteData(Doctor.DoctorId!);
+                              });;
                             },
                             child: Icon(Icons.delete),
                           ),//delete//update

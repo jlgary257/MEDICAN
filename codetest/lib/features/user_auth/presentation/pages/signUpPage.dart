@@ -145,13 +145,14 @@ class _SignUpPageState extends State<SignUpPage> {
     ).toJson();
 
     // Adding the doctor information to the 'doctor' subcollection
-    await doctorDocRef.set(newDoctor);
+
 
     setState(() {
       _isSigningUp = false;
     });
 
     if (user != null) {
+      await doctorDocRef.set(newDoctor);
       showToast(message: "User is successfully created");
       Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => homeAdmin()),
               (route) => false);
