@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codetest/Admin/admin_info.dart';
+import 'package:codetest/Patient/Main_Patient.dart';
 import 'package:codetest/Patient/patient_info.dart';
 import 'package:codetest/features/user_auth/presentation/widgets/form_container_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -80,7 +81,7 @@ class _homeAdminState extends State<homeAdmin> {
               onPressed: () {
               Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => createPatient()),
+              MaterialPageRoute(builder: (context) => MainPatient()),
               );
               },
               text: "Patient",
