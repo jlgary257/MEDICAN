@@ -16,7 +16,6 @@ class _createMedRepState extends State<createMedRep> {
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _Controller = TextEditingController();
   final TextEditingController _patController = TextEditingController();
-  final TextEditingController _patController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

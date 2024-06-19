@@ -223,9 +223,19 @@ class _updatePatientState extends State<updatePatient> {
                 hintText: "Phone No.",
               ),
               SizedBox(height: 30),
-              RedElevatedButton(onPressed: updatePatient, text: "Update"),
-              SizedBox(height: 20),
-              RedElevatedButton(onPressed: () =>deletePatient(_patientID), text: "Delete")
+              Row(
+                children: [
+                  Expanded(
+                    child: RedElevatedButton(onPressed: updatePatient, text: "Update"),
+                  ),
+                  SizedBox(width: 10), // Add some space between buttons
+                  Expanded(
+                    child: RedElevatedButton(onPressed: () {
+                      deletePatient(_patientID);
+                    }, text: "Delete"),
+                  ),
+                ],
+              ),
             ]
           ],
         ),
@@ -364,5 +374,3 @@ class PatientModel {
     };
   }
 }
-
-

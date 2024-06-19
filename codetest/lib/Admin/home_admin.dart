@@ -105,7 +105,7 @@ class _homeAdminState extends State<homeAdmin> {
       name: doctorModel.name,
       email: doctorModel.email,
       DoctorId: doctorModel.DoctorId,
-      StaffId: "DR",
+      StaffId: "2",
     ).toJson();
 
     doctorCollection.doc(doctorModel.DoctorId).update(newDoctor);

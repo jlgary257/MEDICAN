@@ -15,10 +15,10 @@ Future main() async{
   WidgetsFlutterBinding.ensureInitialized();
   if(kIsWeb){
     await Firebase.initializeApp(options:
-    FirebaseOptions(apiKey: "AIzaSyDpdg5OJ7RPjBJ1H6P58RHBmbwXpJ0Ht0k",
-        appId: "1:1075732898430:web:2820d3c5f6efb631f4ee2f",
-        messagingSenderId: "1075732898430",
-        projectId: "medican-257"));
+    FirebaseOptions(apiKey: "AIzaSyCdsY6gatBHi8j89xR1pBGszy_B_48V2Cg",
+        appId: "1:220570038936:web:88fbe427e147e5103c56ed",
+        messagingSenderId: "220570038936",
+        projectId: "medican-jl"));
   }else {
     await Firebase.initializeApp();
   }
