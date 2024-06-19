@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codetest/Admin/home_admin.dart';
+import 'package:codetest/features/user_auth/presentation/widgets/basic_fx.dart';
 import 'package:codetest/features/user_auth/presentation/widgets/form_container_widget.dart';
 import 'package:codetest/global/toast.dart';
 import 'package:flutter/material.dart';
@@ -231,7 +232,7 @@ class _updatePatientState extends State<updatePatient> {
                   SizedBox(width: 10), // Add some space between buttons
                   Expanded(
                     child: RedElevatedButton(onPressed: () {
-                      deletePatient(_patientID);
+                      showDeleteConfirmation(context, deletePatient);
                     }, text: "Delete"),
                   ),
                 ],

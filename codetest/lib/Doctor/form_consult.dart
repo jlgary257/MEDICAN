@@ -1,7 +1,6 @@
-import 'dart:js';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codetest/Doctor/home_dr.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../features/user_auth/presentation/widgets/form_container_widget.dart';
@@ -19,17 +18,49 @@ class _DrFormState extends State<DrForm> {
   TextEditingController _patIdController = TextEditingController();
   TextEditingController _diagnoseController = TextEditingController();
   TextEditingController _transferController = TextEditingController();
-  TextEditingController _medCondController = TextEditingController();
-  TextEditingController _drController = TextEditingController();
+  String? _selectedMedCondition;
+  String? _doctorId;
 
-  void dispose(){
-    this._diagnoseController;
-    this._drController;
-    this._transferController;
-    this._medCondController;
-    this._patIdController;
+  @override
+  void dispose() {
+    _patIdController.dispose();
+    _diagnoseController.dispose();
+    _transferController.dispose();
+    super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _fetchDoctorId();
+  }
+
+  Future<void> _fetchDoctorId() async {
+    String email = FirebaseAuth.instance.currentUser?.email ?? '';
+
+    if (email.isNotEmpty) {
+      String? doctorId = await getDoctorIdByEmail(email);
+      setState(() {
+        _doctorId = doctorId;
+      });
+    }
+  }
+
+  Future<String?> getDoctorIdByEmail(String email) async {
+    try {
+      final doctorCollection = FirebaseFirestore.instance.collection("Staff").doc("2").collection("Doctor");
+      final doctorQuerySnapshot = await doctorCollection.where('email', isEqualTo: email).get();
+
+      if (doctorQuerySnapshot.docs.isNotEmpty) {
+        return doctorQuerySnapshot.docs[0].id; // Return the document ID as the Doctor ID
+      }
+
+      return null; // Doctor ID not found
+    } catch (error) {
+      print('Error getting doctor ID: $error');
+      return null; // Handle potential errors
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,17 +88,50 @@ class _DrFormState extends State<DrForm> {
               isPasswordField: false,
             ),
             SizedBox(height: 10),
-            
-            FormContainerWidget(
-              controller: _drController,
-              hintText: "Doctor",
-              isPasswordField: false,
-            ),
-            SizedBox(height: 10),
             FormContainerWidget(
               controller: _patIdController,
               hintText: "PatientID",
               isPasswordField: false,
+            ),
+            SizedBox(height: 10),
+            DropdownButtonFormField<String>(
+              value: _selectedMedCondition,
+              hint: Text("Select Medical Condition"),
+              items: [
+                DropdownMenuItem(
+                  value: "Respiratory Infection",
+                  child: Text("Respiratory Infection"),
+                ),
+                DropdownMenuItem(
+                  value: "Parasite Infection",
+                  child: Text("Parasite Infection"),
+                ),
+                DropdownMenuItem(
+                  value: "Lumps and Bumps",
+                  child: Text("Lumps and Bumps"),
+                ),
+                DropdownMenuItem(
+                  value: "Gastrointestinal Disease",
+                  child: Text("Gastrointestinal Disease"),
+                ),
+                DropdownMenuItem(
+                  value: "Trauma",
+                  child: Text("Trauma"),
+                ),
+                DropdownMenuItem(
+                  value: "Covid-19",
+                  child: Text("Covid-19"),
+                ),
+                DropdownMenuItem(
+                  value: "Common Cases/Others",
+                  child: Text("Common Cases/Others"),
+                ),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  _selectedMedCondition = value;
+                });
+              },
             ),
             SizedBox(height: 30),
             RedElevatedButton(onPressed: _addMedReport, text: "Diagnose"),
@@ -81,37 +145,49 @@ class _DrFormState extends State<DrForm> {
   void _addMedReport() async {
     String diagnosis = _diagnoseController.text;
     String transferTo = _transferController.text;
-    String MedConditionID = _medCondController.text;
-    String doctorID = _drController.text;
+    String? doctorID = _doctorId;
     String patientID = _patIdController.text;
+    String medConditionId = _selectedMedCondition ?? "";
+
+    if (medConditionId.isEmpty) {
+      showToast(message: "Please select a medical condition");
+      return;
+    }
 
     final DateTime now = DateTime.now();
     String formattedDate = DateFormat('dd-MMM-yyyy').format(now);
     String formattedTime = DateFormat('HH:mm:ss').format(now);
 
-    final MedRepCollection = FirebaseFirestore.instance.collection("MedicalCondition").doc().collection("MedicalReport");
-    String id = MedRepCollection.doc().id;
+    final medRepCollection = FirebaseFirestore.instance
+        .collection("MedicalCondition")
+        .doc(medConditionId)
+        .collection("MedicalReports");
+    String id = medRepCollection.doc().id;
 
     final newMedRep = MedRepModel(
       ID: id,
       date: formattedDate,
       time: formattedTime,
       diagnose: diagnosis,
+      MedConditionId: medConditionId,
       TransferTo: transferTo,
       DoctorID: doctorID,
       PatientID: patientID,
     ).toJson();
 
     try {
-          await MedRepCollection.doc(id).set(newMedRep);
+      await medRepCollection.doc(id).set(newMedRep);
 
-          if (newMedRep != null){
-            showToast(message: "Added MedRep successfully");
-            Navigator.pushAndRemoveUntil(context as BuildContext, MaterialPageRoute(builder: (context) => homeDoctor()),(route) => false);
-          }
-
+      if (newMedRep != null) {
+        showToast(message: "Added MedRep successfully");
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => homeDoctor()),
+              (route) => false,
+        );
+      }
     } on Exception catch (e) {
-      print("Error :  ${e}");
+      print("Error: ${e}");
     }
   }
 }
@@ -137,8 +213,7 @@ class MedRepModel {
     this.PatientID,
   });
 
-  static MedRepModel fromSnapshot(
-      DocumentSnapshot<Map<String, dynamic>> snapshot) {
+  static MedRepModel fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return MedRepModel(
       ID: snapshot['ID'],
       date: snapshot['date'],

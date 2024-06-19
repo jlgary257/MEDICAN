@@ -5,83 +5,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codetest/features/user_auth/presentation/widgets/form_container_widget.dart';
 import 'package:flutter/material.dart';
 
-class createMedRep extends StatefulWidget {
-  const createMedRep({super.key});
+class updateMedReport extends StatefulWidget {
+  const updateMedReport({super.key});
 
   @override
-  State<createMedRep> createState() => _createMedRepState();
+  State<updateMedReport> createState() => _updateMedReportState();
 }
 
-class _createMedRepState extends State<createMedRep> {
-  final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _Controller = TextEditingController();
-  final TextEditingController _patController = TextEditingController();
+class _updateMedReportState extends State<updateMedReport> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: MainAppBar(title: "Home Admin"),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 200),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Medical Report",
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 50),
-            FormContainerWidget(
-              controller: _ICController,
-              hintText: "IC",
-            ),
-            SizedBox(height: 10),
-            FormContainerWidget(
-              controller: _nameController,
-              hintText: "Name",
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: RadioListTile<String>(
-                    title: const Text('Male'),
-                    value: 'Male',
-                    groupValue: _selectedGender,
-                    onChanged: (String? value) {
-                      setState(() {
-                        _selectedGender = value!;
-                      });
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: RadioListTile<String>(
-                    title: const Text('Female'),
-                    value: 'Female',
-                    groupValue: _selectedGender,
-                    onChanged: (String? value) {
-                      setState(() {
-                        _selectedGender = value!;
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 10),
-            FormContainerWidget(
-              controller: _phoneNoController,
-              hintText: "Phone No.",
-            ),
-            SizedBox(height: 30),
-            RedElevatedButton(onPressed: addMedicalReport, text: "Register"),
-            SizedBox(height: 20),
-          ],
-        ),
-      ),
-    );
+    return const Placeholder();
   }
 }
+
 
 class MedRepModel {
   final String? ID;
