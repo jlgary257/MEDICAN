@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codetest/Doctor/home_dr.dart';
 import 'package:flutter/material.dart';
@@ -14,12 +16,20 @@ class DrForm extends StatefulWidget {
 }
 
 class _DrFormState extends State<DrForm> {
-  //TextEditingController _IDController = TextEditingController();
-  TextEditingController _patController = TextEditingController();
+  TextEditingController _patIdController = TextEditingController();
   TextEditingController _diagnoseController = TextEditingController();
   TextEditingController _transferController = TextEditingController();
+  TextEditingController _medCondController = TextEditingController();
   TextEditingController _drController = TextEditingController();
-  TextEditingController _patTypeController = TextEditingController();
+
+  void dispose(){
+    this._diagnoseController;
+    this._drController;
+    this._transferController;
+    this._medCondController;
+    this._patIdController;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +57,7 @@ class _DrFormState extends State<DrForm> {
               isPasswordField: false,
             ),
             SizedBox(height: 10),
-            FormContainerWidget(
-              controller: _patTypeController,
-              hintText: "Patient Type",
-              isPasswordField: false,
-            ),
-            SizedBox(height: 10),
+            
             FormContainerWidget(
               controller: _drController,
               hintText: "Doctor",
@@ -60,29 +65,12 @@ class _DrFormState extends State<DrForm> {
             ),
             SizedBox(height: 10),
             FormContainerWidget(
-              controller: _patController,
+              controller: _patIdController,
               hintText: "PatientID",
               isPasswordField: false,
             ),
             SizedBox(height: 30),
-            GestureDetector(
-              onTap: () {
-                  _addPatientData();
-              },
-              child: Container(
-                width: double.infinity,
-                height: 45,
-                decoration: BoxDecoration(
-                    color: Colors.red, borderRadius: BorderRadius.circular(10)),
-                child: Center(
-                  child: Text(
-                    "Diagnose",
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-            ),
+            RedElevatedButton(onPressed: _addMedReport, text: "Diagnose"),
             SizedBox(height: 20),
           ],
         ),
@@ -90,37 +78,36 @@ class _DrFormState extends State<DrForm> {
     );
   }
 
-  void _addPatientData() async {
+  void _addMedReport() async {
     String diagnosis = _diagnoseController.text;
     String transferTo = _transferController.text;
-    String patType = _patTypeController.text;
+    String MedConditionID = _medCondController.text;
     String doctorID = _drController.text;
-    String patientID = _patController.text;
+    String patientID = _patIdController.text;
 
     final DateTime now = DateTime.now();
     String formattedDate = DateFormat('dd-MMM-yyyy').format(now);
     String formattedTime = DateFormat('HH:mm:ss').format(now);
 
-    final admissionCollection = FirebaseFirestore.instance.collection("Admission");
-    String id = admissionCollection.doc().id;
+    final MedRepCollection = FirebaseFirestore.instance.collection("MedicalCondition").doc().collection("MedicalReport");
+    String id = MedRepCollection.doc().id;
 
-    final newAdmission = AdmissionModel(
+    final newMedRep = MedRepModel(
       ID: id,
       date: formattedDate,
       time: formattedTime,
       diagnose: diagnosis,
       TransferTo: transferTo,
-      PatientType: patType,
       DoctorID: doctorID,
       PatientID: patientID,
     ).toJson();
 
     try {
-          await admissionCollection.doc(id).set(newAdmission);
+          await MedRepCollection.doc(id).set(newMedRep);
 
-          if (newAdmission != null){
-            showToast(message: "Added Admission successfully");
-            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => homeDoctor()),(route) => false);
+          if (newMedRep != null){
+            showToast(message: "Added MedRep successfully");
+            Navigator.pushAndRemoveUntil(context as BuildContext, MaterialPageRoute(builder: (context) => homeDoctor()),(route) => false);
           }
 
     } on Exception catch (e) {
@@ -129,35 +116,35 @@ class _DrFormState extends State<DrForm> {
   }
 }
 
-class AdmissionModel {
+class MedRepModel {
   final String? ID;
   final String? date;
   final String? time;
   final String? diagnose;
-  final String? PatientType;
+  final String? MedConditionId;
   final String? TransferTo;
   final String? DoctorID;
   final String? PatientID;
 
-  AdmissionModel({
+  MedRepModel({
     this.ID,
     this.date,
     this.time,
     this.diagnose,
-    this.PatientType,
+    this.MedConditionId,
     this.TransferTo,
     this.DoctorID,
     this.PatientID,
   });
 
-  static AdmissionModel fromSnapshot(
+  static MedRepModel fromSnapshot(
       DocumentSnapshot<Map<String, dynamic>> snapshot) {
-    return AdmissionModel(
+    return MedRepModel(
       ID: snapshot['ID'],
       date: snapshot['date'],
       time: snapshot['time'],
       diagnose: snapshot['diagnose'],
-      PatientType: snapshot['PatientType'],
+      MedConditionId: snapshot['MedConditionId'],
       TransferTo: snapshot['TransferTo'],
       DoctorID: snapshot['DoctorID'],
       PatientID: snapshot['PatientID'],
@@ -170,7 +157,7 @@ class AdmissionModel {
       "date": date,
       "time": time,
       "diagnose": diagnose,
-      "PatientType": PatientType,
+      "MedConditionId": MedConditionId,
       "TransferTo": TransferTo,
       "DoctorID": DoctorID,
       "PatientID": PatientID,
