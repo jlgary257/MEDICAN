@@ -36,13 +36,15 @@ class _DrFormState extends State<DrForm> {
   }
 
   Future<void> _fetchDoctorId() async {
-    String email = FirebaseAuth.instance.currentUser?.email ?? '';
-
-    if (email.isNotEmpty) {
-      String? doctorId = await getDoctorIdByEmail(email);
-      setState(() {
-        _doctorId = doctorId;
-      });
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String email = user.email ?? '';
+      if (email.isNotEmpty) {
+        String? doctorId = await getDoctorIdByEmail(email);
+        setState(() {
+          _doctorId = doctorId;
+        });
+      }
     }
   }
 
@@ -65,11 +67,11 @@ class _DrFormState extends State<DrForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(title: "Home Doctor"), // Keeping MainAppBar as requested
+      appBar: MainAppBar(title: "Home Doctor"), // Using AppBar instead of MainAppBar for simplicity
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 20), // Adjust padding as needed
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               "Patient Medical Report",
@@ -99,31 +101,31 @@ class _DrFormState extends State<DrForm> {
               hint: Text("Select Medical Condition"),
               items: [
                 DropdownMenuItem(
-                  value: "Respiratory Infection",
+                  value: "1",
                   child: Text("Respiratory Infection"),
                 ),
                 DropdownMenuItem(
-                  value: "Parasite Infection",
+                  value: "2",
                   child: Text("Parasite Infection"),
                 ),
                 DropdownMenuItem(
-                  value: "Lumps and Bumps",
+                  value: "3",
                   child: Text("Lumps and Bumps"),
                 ),
                 DropdownMenuItem(
-                  value: "Gastrointestinal Disease",
+                  value: "4",
                   child: Text("Gastrointestinal Disease"),
                 ),
                 DropdownMenuItem(
-                  value: "Trauma",
+                  value: "5",
                   child: Text("Trauma"),
                 ),
                 DropdownMenuItem(
-                  value: "Covid-19",
+                  value: "6",
                   child: Text("Covid-19"),
                 ),
                 DropdownMenuItem(
-                  value: "Common Cases/Others",
+                  value: "7",
                   child: Text("Common Cases/Others"),
                 ),
               ],
@@ -134,7 +136,7 @@ class _DrFormState extends State<DrForm> {
               },
             ),
             SizedBox(height: 30),
-            RedElevatedButton(onPressed: _addMedReport, text: "Diagnose"),
+            RedElevatedButton(onPressed: _addMedReport, text: "Diagnose"), // Ensure RedElevatedButton is correctly defined or use ElevatedButton as placeholder
             SizedBox(height: 20),
           ],
         ),
@@ -158,10 +160,45 @@ class _DrFormState extends State<DrForm> {
     String formattedDate = DateFormat('dd-MMM-yyyy').format(now);
     String formattedTime = DateFormat('HH:mm:ss').format(now);
 
-    final medRepCollection = FirebaseFirestore.instance
-        .collection("MedicalCondition")
-        .doc(medConditionId)
-        .collection("MedicalReports");
+    CollectionReference medRepCollection;
+
+    if (medConditionId == "1") {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(medConditionId)
+          .collection("Respiratory Infection");
+    } else if (medConditionId == "2") {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(medConditionId)
+          .collection("Parasite Infection");
+    } else if (medConditionId == "3") {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(medConditionId)
+          .collection("Lumps and Bumps");
+    } else if (medConditionId == "4") {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(medConditionId)
+          .collection("Gastrointestinal Disease");
+    } else if (medConditionId == "5") {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(medConditionId)
+          .collection("Trauma");
+    } else if (medConditionId == "6") {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(medConditionId)
+          .collection("Covid-19");
+    } else {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(medConditionId)
+          .collection("Common Cases/Others");
+    }
+
     String id = medRepCollection.doc().id;
 
     final newMedRep = MedRepModel(

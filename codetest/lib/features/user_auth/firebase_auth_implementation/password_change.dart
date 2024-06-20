@@ -1,4 +1,5 @@
 import 'package:codetest/features/user_auth/presentation/widgets/form_container_widget.dart';
+import 'package:codetest/global/toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -50,22 +51,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       await user.updatePassword(newPassword);
 
       showToast(message: "Password successfully changed");
+
     } catch (e) {
       showToast(message: "Failed to change password: $e");
     }
   }
 
-  void showToast({required String message}) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 1,
-      backgroundColor: Colors.black,
-      textColor: Colors.white,
-      fontSize: 16.0,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {

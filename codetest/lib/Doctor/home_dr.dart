@@ -110,7 +110,6 @@ class _homeDoctorState extends State<homeDoctor> {
   }
 
   Future<String?> getDoctorIdByEmail(String email) async {
-    print(email);
     try {
       final doctorCollection = FirebaseFirestore.instance.collection("Staff").doc("2").collection("Doctor");
       final doctorQuerySnapshot = await doctorCollection.where('email', isEqualTo: email).get();
