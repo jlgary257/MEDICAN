@@ -38,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 color: Colors.red,
                 fontWeight: FontWeight.bold,
                 fontSize: 30,
-              )).animate().fade(duration: 500.ms),
+              )).animate().fade(duration: 1000.ms),
         ));
   }
 }

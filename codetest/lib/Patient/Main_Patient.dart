@@ -1,6 +1,7 @@
 
 
 import 'package:codetest/Patient/patient_info.dart';
+import 'package:codetest/features/user_auth/presentation/widgets/basic_fx.dart';
 import 'package:codetest/features/user_auth/presentation/widgets/form_container_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -38,6 +39,15 @@ class _MainPatientState extends State<MainPatient> {
               );
             },
               text: "Update Patient",
+            ),
+            SizedBox(height: 20,),
+            RedElevatedButton(onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TabulateData()),
+              );
+            },
+              text: "View Patient",
             ),
           ],
 

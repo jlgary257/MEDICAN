@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:codetest/features/user_auth/presentation/widgets/form_container_widget.dart';
 import 'package:flutter/material.dart';
 
 class TabulateData extends StatefulWidget {
@@ -50,6 +51,7 @@ class _TabulateDataState extends State<TabulateData> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: MainAppBar(title: "Home",),
       body: FutureBuilder<List<Patient>>(
         future: _patientList,
         builder: (context, snapshot) {
