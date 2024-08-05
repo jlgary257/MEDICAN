@@ -126,7 +126,7 @@ class _DrFormState extends State<DrForm> {
                 ),
                 DropdownMenuItem(
                   value: "7",
-                  child: Text("Common Cases/Others"),
+                  child: Text("Common Cases and Others"),
                 ),
               ],
               onChanged: (value) {
@@ -166,22 +166,22 @@ class _DrFormState extends State<DrForm> {
       medRepCollection = FirebaseFirestore.instance
           .collection("MedicalCondition")
           .doc(medConditionId)
-          .collection("Respiratory Infection");
+          .collection("Respiratory_Infection");
     } else if (medConditionId == "2") {
       medRepCollection = FirebaseFirestore.instance
           .collection("MedicalCondition")
           .doc(medConditionId)
-          .collection("Parasite Infection");
+          .collection("Parasite_Infection");
     } else if (medConditionId == "3") {
       medRepCollection = FirebaseFirestore.instance
           .collection("MedicalCondition")
           .doc(medConditionId)
-          .collection("Lumps and Bumps");
+          .collection("Lumps_and_Bumps");
     } else if (medConditionId == "4") {
       medRepCollection = FirebaseFirestore.instance
           .collection("MedicalCondition")
           .doc(medConditionId)
-          .collection("Gastrointestinal Disease");
+          .collection("Gastrointestinal_Disease");
     } else if (medConditionId == "5") {
       medRepCollection = FirebaseFirestore.instance
           .collection("MedicalCondition")
@@ -192,11 +192,16 @@ class _DrFormState extends State<DrForm> {
           .collection("MedicalCondition")
           .doc(medConditionId)
           .collection("Covid-19");
-    } else {
+    } else if(medConditionId == "7"){
       medRepCollection = FirebaseFirestore.instance
           .collection("MedicalCondition")
           .doc(medConditionId)
-          .collection("Common Cases/Others");
+          .collection("Common_Cases_and_Others");
+    } else{
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(medConditionId)
+          .collection("Extra");
     }
 
     String id = medRepCollection.doc().id;
