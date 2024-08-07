@@ -19,7 +19,8 @@ class _DrFormState extends State<DrForm> {
   TextEditingController _diagnoseController = TextEditingController();
   TextEditingController _transferController = TextEditingController();
   String? _selectedMedCondition;
-  String? _doctorId;
+  //String? _doctorId;
+  String? _doctorEmail;
 
   @override
   void dispose() {
@@ -32,10 +33,23 @@ class _DrFormState extends State<DrForm> {
   @override
   void initState() {
     super.initState();
-    _fetchDoctorId();
+    //_fetchDoctorId();
+    _fetchDoctorEmail();
   }
 
-  Future<void> _fetchDoctorId() async {
+  Future<void> _fetchDoctorEmail() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        _doctorEmail = user.email ?? '';
+      });
+    } else {
+      print('No user is currently signed in.');
+    }
+  }
+
+
+  /*Future<void> _fetchDoctorId() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       String email = user.email ?? '';
@@ -46,7 +60,7 @@ class _DrFormState extends State<DrForm> {
         });
       }
     }
-  }
+  }*/
 
   Future<String?> getDoctorIdByEmail(String email) async {
     try {
@@ -147,7 +161,8 @@ class _DrFormState extends State<DrForm> {
   void _addMedReport() async {
     String diagnosis = _diagnoseController.text;
     String transferTo = _transferController.text;
-    String? doctorID = _doctorId;
+    //String? doctorID = _doctorId;
+    String? doctorEmail = _doctorEmail;
     String patientID = _patIdController.text;
     String medConditionId = _selectedMedCondition ?? "";
 
@@ -204,16 +219,17 @@ class _DrFormState extends State<DrForm> {
           .collection("Extra");
     }
 
-    String id = medRepCollection.doc().id;
+   String id = medRepCollection.doc().id;
 
     final newMedRep = MedRepModel(
-      ID: id,
+      //ID: id,
       date: formattedDate,
       time: formattedTime,
       diagnose: diagnosis,
       MedConditionId: medConditionId,
       TransferTo: transferTo,
-      DoctorID: doctorID,
+      //DoctorID: doctorID,
+      DoctorEmail: doctorEmail,
       PatientID: patientID,
     ).toJson();
 
@@ -235,48 +251,52 @@ class _DrFormState extends State<DrForm> {
 }
 
 class MedRepModel {
-  final String? ID;
+  //final String? ID;
   final String? date;
   final String? time;
   final String? diagnose;
   final String? MedConditionId;
   final String? TransferTo;
-  final String? DoctorID;
+  //final String? DoctorID;
+  final String? DoctorEmail;
   final String? PatientID;
 
   MedRepModel({
-    this.ID,
+    //this.ID,
     this.date,
     this.time,
     this.diagnose,
     this.MedConditionId,
     this.TransferTo,
-    this.DoctorID,
+    //this.DoctorID,
+    this.DoctorEmail,
     this.PatientID,
   });
 
   static MedRepModel fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return MedRepModel(
-      ID: snapshot['ID'],
+      //ID: snapshot['ID'],
       date: snapshot['date'],
       time: snapshot['time'],
       diagnose: snapshot['diagnose'],
       MedConditionId: snapshot['MedConditionId'],
       TransferTo: snapshot['TransferTo'],
-      DoctorID: snapshot['DoctorID'],
+      //DoctorID: snapshot['DoctorID'],
+      DoctorEmail: snapshot['DoctorEmail'],
       PatientID: snapshot['PatientID'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "ID": ID,
+      //"ID": ID,
       "date": date,
       "time": time,
       "diagnose": diagnose,
       "MedConditionId": MedConditionId,
       "TransferTo": TransferTo,
-      "DoctorID": DoctorID,
+      //"DoctorID": DoctorID,
+      "DoctorEmail": DoctorEmail,
       "PatientID": PatientID,
     };
   }
