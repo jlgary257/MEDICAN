@@ -1,5 +1,6 @@
 import 'package:codetest/Admin/home_admin.dart';
 import 'package:codetest/Doctor/home_dr.dart';
+import 'package:codetest/data_visual/yearCases.dart';
 import 'package:codetest/features/user_auth/presentation/pages/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -34,7 +35,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => SplashScreen(
           // Here, you can decide whether to show the LoginPage or HomePage based on user authentication
-          child: LoginPage()
+          //child: LoginPage()
+          child: TraumaCase()
         ),
         '/login': (context) => LoginPage(),
         '/signUp': (context) => SignUpPage(),
