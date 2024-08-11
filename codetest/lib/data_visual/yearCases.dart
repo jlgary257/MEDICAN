@@ -1,13 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:codetest/features/user_auth/presentation/widgets/form_container_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:intl/intl.dart';
 
 Future<Map<int, int>> fetchData() async {
   // Reference to the trauma subcollection
   CollectionReference traumaCollection = FirebaseFirestore.instance
-      .collection('medicalCondition')
-      .doc('trauma') // Replace with the actual document ID if needed
-      .collection('trauma');
+      .collection('MedicalCondition')
+      .doc('5') // Replace with the actual document ID if needed
+      .collection('Trauma');
 
   QuerySnapshot snapshot = await traumaCollection.get();
 
@@ -27,7 +29,8 @@ Future<Map<int, int>> fetchData() async {
 
 // Helper function to parse the date string
 DateTime _parseDate(String dateString) {
-  return DateTime.parse(dateString.replaceAll('-', ' '));
+  final DateFormat format = DateFormat('dd-MMM-yyyy');
+  return format.parse(dateString);
 }
 
 class CasesBarChart extends StatelessWidget {
@@ -137,10 +140,9 @@ class TraumaCase extends StatefulWidget {
 class _traumaCase extends State<TraumaCase> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Cases vs. Years'),
+    return Scaffold(
+        appBar: MainAppBar(
+          title: 'Cases vs. Years',
         ),
         body: FutureBuilder(
           future: fetchData(),
@@ -157,7 +159,6 @@ class _traumaCase extends State<TraumaCase> {
             }
           },
         ),
-      ),
-    );
+      );
   }
 }
