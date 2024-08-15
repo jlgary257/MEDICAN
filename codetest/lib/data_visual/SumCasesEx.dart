@@ -1,6 +1,5 @@
 
-
-
+import 'package:fl_chart/fl_chart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -37,6 +36,52 @@ class _SumTraumaState extends State<SumTrauma> {
             return Text('No data found');
           }
         },
+      ),
+    );
+  }
+}
+
+class CasesLineChart extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 1.5,
+      child: LineChart(
+        LineChartData(
+          gridData: FlGridData(show: true),
+          titlesData: FlTitlesData(
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                getTitlesWidget: defaultGetTitle,
+                reservedSize: 34,
+              ),
+            ),
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                getTitlesWidget: defaultGetTitle,
+                reservedSize: 40,
+              ),
+            ),
+          ),
+          borderData: FlBorderData(show: true),
+          lineBarsData: [
+            LineChartBarData(
+              spots: [
+                FlSpot(0, 3),
+                FlSpot(1, 4),
+                FlSpot(2, 5),
+                FlSpot(3, 6),
+              ],
+              isCurved: true,
+              barWidth: 2,
+              color: Colors.red,
+              belowBarData: BarAreaData(show: true),
+              dotData: FlDotData(show: true),
+            ),
+          ],
+        ),
       ),
     );
   }

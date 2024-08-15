@@ -5,7 +5,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 
 Future<Map<int, int>> fetchData() async {
-  // Reference to the trauma subcollection
   CollectionReference traumaCollection = FirebaseFirestore.instance
       .collection('MedicalCondition')
       .doc('5') // Replace with the actual document ID if needed
@@ -51,8 +50,9 @@ class CasesBarChart extends StatelessWidget {
               final double value = rod.toY; // Get the correct value
               return BarTooltipItem(
                 'Year: ${group.x.toInt()}\n',
+                //.sort((a, b) => a.length.compareTo(b.length));
                 const TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),
@@ -99,7 +99,7 @@ class CasesBarChart extends StatelessWidget {
           ),
         ),
         borderData: FlBorderData(
-          show: false,
+          show: true,
         ),
         barGroups: _getBarGroups(),
       ),
@@ -107,14 +107,13 @@ class CasesBarChart extends StatelessWidget {
   }
 
   List<BarChartGroupData> _getBarGroups() {
-    return data.entries
-        .map(
-          (entry) => BarChartGroupData(
+    List<MapEntry<int,int>> sortedEntries = data.entries.toList()..sort((a,b) => a.key.compareTo(b.key));
+    return sortedEntries.map((entry) => BarChartGroupData(
         x: entry.key,
         barRods: [
           BarChartRodData(
             toY: entry.value.toDouble(),
-            color: Colors.blue,
+            color: Colors.red,
             width: 15,
             borderRadius: BorderRadius.circular(4),
           ),
@@ -144,21 +143,125 @@ class _traumaCase extends State<TraumaCase> {
         appBar: MainAppBar(
           title: 'Cases vs. Years',
         ),
-        body: FutureBuilder(
-          future: fetchData(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else {
-              return Padding(
+        body: GridView.count( crossAxisCount: 2, children: [ Container(
+          child: FutureBuilder(
+            future: fetchData(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CasesBarChart(snapshot.data as Map<int, int>),
+                );
+              }
+            },
+          ),
+        ),Container(color: Colors.greenAccent,),
+          Container(color: Colors.blue,child: FutureBuilder(
+            future: fetchData(),
+          builder: (context, snapshot){
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else {
+                return Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: CasesBarChart(snapshot.data as Map<int, int>),
+                child: CasesLineChart(data: snapshot.data as Map<int,int>),
               );
+              }
             }
-          },
-        ),
+        ),),
+          Container(color: Colors.green,),])
       );
+  }
+}
+
+class CasesLineChart extends StatefulWidget {
+  final Map<int,int> data;
+
+  CasesLineChart({required this.data});
+  @override
+  _CasesLineChartState createState() => _CasesLineChartState();
+}
+
+class _CasesLineChartState extends State<CasesLineChart> {
+  //final Map<int,int> data;
+  List<FlSpot> spot = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadChartData();
+  }
+
+  loadChartData() {
+    List<MapEntry<int,int>> sortedEntries = widget.data.entries.toList()..sort((a,b) => a.key.compareTo(b.key));
+    List<FlSpot> dataPoints = sortedEntries.map((entry) => FlSpot(entry.key.toDouble(), entry.value.toDouble())).toList();
+    setState(() {
+
+        spot = dataPoints;
+
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 1.5,
+      child: LineChart(
+        LineChartData(
+          gridData: FlGridData(show: true),
+          titlesData: FlTitlesData(
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                getTitlesWidget: (value, meta) {
+                  return SideTitleWidget(
+                    axisSide: meta.axisSide,
+                    space: 8.0,
+                    child: Text(
+                      value.toInt().toString(),
+                      style: TextStyle(fontSize: 12),
+                    ),
+                  );
+                },
+                reservedSize: 40,
+              ),
+            ),
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                getTitlesWidget: (value, meta) {
+                  return SideTitleWidget(
+                    axisSide: meta.axisSide,
+                    space: 8.0,
+                    child: Text(
+                      value.toInt().toString(),
+                      style: TextStyle(fontSize: 12),
+                    ),
+                  );
+                },
+                reservedSize: 40,
+              ),
+            ),
+          ),
+          borderData: FlBorderData(show: true),
+          lineBarsData: [
+            LineChartBarData(
+              spots: spot,
+              isCurved: true,
+              barWidth: 2,
+              color: Colors.red,
+              belowBarData: BarAreaData(show: true),
+              dotData: FlDotData(show: true),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
