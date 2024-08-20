@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codetest/features/user_auth/presentation/widgets/form_container_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 Future<Map<int, int>> fetchData() async {
@@ -159,8 +161,22 @@ class _traumaCase extends State<TraumaCase> {
               }
             },
           ),
-        ),Container(color: Colors.greenAccent,),
-          Container(color: Colors.blue,child: FutureBuilder(
+        ),Container(child: FutureBuilder(future: fetchCaseCount(),
+          builder: (context, snapshot){
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (snapshot.hasData){
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: HighDiagnose(totalCases: snapshot.data ?? 0),
+            );
+          } else{
+            return Center(child: Text('No data availabale'));
+            }
+        },)),
+          Container(color: Colors.white30,child: FutureBuilder(
             future: fetchData(),
           builder: (context, snapshot){
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -175,7 +191,7 @@ class _traumaCase extends State<TraumaCase> {
               }
             }
         ),),
-          Container(color: Colors.green,),])
+          Container(color: Colors.white,),])
       );
   }
 }
@@ -264,4 +280,81 @@ class _CasesLineChartState extends State<CasesLineChart> {
       ),
     );
   }
+}
+
+class HighDiagnose extends StatefulWidget {
+  final int totalCases;
+
+  const HighDiagnose({required this.totalCases});
+  @override
+  State<HighDiagnose> createState() => _HighDiagnoseState();
+}
+
+class _HighDiagnoseState extends State<HighDiagnose> with SingleTickerProviderStateMixin{
+  late AnimationController _controller;
+  late Animation<int> _animation;
+  //int _totalCases = 0;
+  @override
+
+  void initState(){
+    super.initState();
+    _controller =AnimationController(vsync: this,duration: const Duration(seconds: 2),);
+
+    _animation = IntTween(begin: 0, end: widget.totalCases).animate(_controller)
+      ..addListener(() {
+        setState(() {});
+      });
+
+    // Start the animation
+    _controller.forward();
+  }
+
+
+  void dispose(){
+    _controller.dispose();
+    super.dispose();
+  }
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min, // Centers the content vertically
+        children: [
+          Text(
+            'Total Cases',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          SizedBox(height: 10), // Adds spacing between the title and the box
+          Container(
+            padding: EdgeInsets.all(10.0),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.red, width: 2.0),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: Text(
+              '${_animation.value}',
+              style: TextStyle(
+                fontSize: 50,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+  }
+}
+Future<int> fetchCaseCount() async {
+  CollectionReference traumaCollection = FirebaseFirestore.instance
+      .collection('MedicalCondition')
+      .doc('5') // Replace with the actual document ID if needed
+      .collection('Trauma');
+
+  QuerySnapshot snapshot = await traumaCollection.get();
+
+  return snapshot.size;
 }
