@@ -1,5 +1,3 @@
-
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -57,7 +55,7 @@ class _FormContainerWidgetState extends State<FormContainerWidget> {
         controller: widget.controller,
         keyboardType: widget.inputType,
         key: widget.fieldKey,
-        obscureText: widget.isPasswordField == true? _obscureText : false,
+        obscureText: widget.isPasswordField == true ? _obscureText : false,
         onSaved: widget.onSaved,
         validator: widget.validator,
         onFieldSubmitted: widget.onFieldSubmitted,
@@ -73,7 +71,10 @@ class _FormContainerWidgetState extends State<FormContainerWidget> {
               });
             },
             child:
-            widget.isPasswordField==true? Icon(_obscureText ? Icons.visibility_off : Icons.visibility, color: _obscureText == false ? Colors.blue : Colors.grey,) : Text(""),
+            widget.isPasswordField == true ? Icon(
+              _obscureText ? Icons.visibility_off : Icons.visibility,
+              color: _obscureText == false ? Colors.blue : Colors.grey,) : Text(
+                ""),
           ),
         ),
       ),
@@ -90,7 +91,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.red,
-      title: Text(title,style: TextStyle(color: Colors.white),),
+      title: Text(title, style: TextStyle(color: Colors.white),),
       actions: <Widget>[
         ElevatedButton(
           onPressed: () {
@@ -162,6 +163,33 @@ class RedElevatedButton extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class RedBigButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final String text;
+
+  const RedBigButton({
+    Key? key,
+    required this.onPressed,
+    required this.text
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 250,
+      height: 300,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(backgroundColor: Colors.red,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),),),
+        onPressed: onPressed,
+        child: Center(child: Text(text, style: TextStyle(
+            color: Colors.white, fontWeight: FontWeight.w700, fontSize: 25),)),
       ),
     );
   }

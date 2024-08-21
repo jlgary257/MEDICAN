@@ -1,6 +1,7 @@
 import 'package:codetest/Admin/home_admin.dart';
 import 'package:codetest/Doctor/home_dr.dart';
 import 'package:codetest/Doctor/patient_info.dart';
+import 'package:codetest/data_visual/MainBI.dart';
 import 'package:codetest/data_visual/SumCasesEx.dart';
 import 'package:codetest/data_visual/bar_chart_example.dart';
 import 'package:codetest/data_visual/yearCases.dart';
@@ -25,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(Duration(seconds: 3), (){
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => TraumaCase(),),
+        MaterialPageRoute(builder: (context) => MainBi(),),
               (route) => false // Predicate to remove all routes
       );
     });
