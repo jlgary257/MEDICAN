@@ -1,4 +1,5 @@
 
+import 'package:codetest/data_visual/SystemDV.dart';
 import 'package:codetest/data_visual/yearCases.dart';
 import 'package:codetest/features/user_auth/presentation/widgets/form_container_widget.dart';
 import'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class _MainBiState extends State<MainBi> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => TraumaCase()),
+                          MaterialPageRoute(builder: (context) => SystemDataV()),
                         );
                       },
                       text: "Main Analytics",
