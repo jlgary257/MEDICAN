@@ -16,7 +16,7 @@ class _MainPatientState extends State<MainPatient> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(title: "Home Admin",),
+      appBar: MainAppBar(title: "Medican",),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

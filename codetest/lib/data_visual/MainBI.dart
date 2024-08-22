@@ -16,7 +16,7 @@ class _MainBiState extends State<MainBi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(title: "Home Admin"),
+      appBar: MainAppBar(title: "Medican"),
       body: Padding(
         padding: const EdgeInsets.symmetric(),
         child:

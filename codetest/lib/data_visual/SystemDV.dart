@@ -8,7 +8,7 @@ class SystemDataV extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(title: 'Home Admin'),
+      appBar: MainAppBar(title: 'Medican'),
       body: GridView.count(
         crossAxisCount: 2,children: [
           Container(color: Colors.redAccent,)

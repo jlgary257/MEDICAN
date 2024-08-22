@@ -50,7 +50,7 @@ class _homeDoctorState extends State<homeDoctor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(title: "Home Doctor"),
+      appBar: MainAppBar(title: "Medican"),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Center(

@@ -61,7 +61,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(title: "Home Doctor"),
+      appBar: MainAppBar(title: "Medican"),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

@@ -29,7 +29,7 @@ class _createPatientState extends State<createPatient> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(title: "Home Admin"),
+      appBar: MainAppBar(title: "Medican"),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 200),
         child: Column(
@@ -109,7 +109,9 @@ class _createPatientState extends State<createPatient> {
     }
 
     final patientCollection = FirebaseFirestore.instance.collection("Patients");
-    String id = patientCollection.doc().id;
+    String id = patientCollection
+        .doc()
+        .id;
 
     final newPatient = PatientModel(
       ID: id,
@@ -174,7 +176,8 @@ class _updatePatientState extends State<updatePatient> {
             SizedBox(height: 50),
             TextField(
               controller: _searchController,
-              decoration: InputDecoration(hintText: "Search by IC or Phone No."),
+              decoration: InputDecoration(
+                  hintText: "Search by IC or Phone No."),
             ),
             SizedBox(height: 10),
             RedElevatedButton(onPressed: searchPatient, text: "Search"),
@@ -227,12 +230,15 @@ class _updatePatientState extends State<updatePatient> {
               Row(
                 children: [
                   Expanded(
-                    child: RedElevatedButton(onPressed: updatePatient, text: "Update"),
+                    child: RedElevatedButton(
+                        onPressed: updatePatient, text: "Update"),
                   ),
                   SizedBox(width: 10), // Add some space between buttons
                   Expanded(
                     child: RedElevatedButton(onPressed: () {
-                      showDeleteConfirmation(context, deletePatient);
+                      showDeleteConfirmation(context, () {
+                        deletePatient(_patientID);
+                      });
                     }, text: "Delete"),
                   ),
                 ],
@@ -339,7 +345,6 @@ class _updatePatientState extends State<updatePatient> {
 }
 
 
-
 class PatientModel {
   final String? ID;
   final String? IC;
@@ -355,7 +360,8 @@ class PatientModel {
     this.phoneNo,
   });
 
-  static PatientModel fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+  static PatientModel fromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return PatientModel(
       ID: snapshot['ID'],
       IC: snapshot['IC'],

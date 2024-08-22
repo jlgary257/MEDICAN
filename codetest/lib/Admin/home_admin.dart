@@ -23,7 +23,7 @@ class _homeAdminState extends State<homeAdmin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(title: "Home Admin"),
+      appBar: MainAppBar(title: "MEDICAN"),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -31,7 +31,7 @@ class _homeAdminState extends State<homeAdmin> {
           children: [
             Center(
               child: Text(
-                "Doctor information",
+                "Administrator",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
@@ -56,7 +56,7 @@ class _homeAdminState extends State<homeAdmin> {
                             leading: GestureDetector(
                               onTap: () {
                                 showDeleteConfirmation(context, () {
-                                  _deleteData(doctor.DoctorId!);
+                                  deleteData(doctor.DoctorId!);
                                 });
                               },
                               child: Icon(Icons.delete),
@@ -137,10 +137,18 @@ class _homeAdminState extends State<homeAdmin> {
     doctorCollection.doc(doctorModel.DoctorId).update(newDoctor);
   }
 
-  void _deleteData(String id) {
-    final userCollection = FirebaseFirestore.instance.collection("Staff").doc("2").collection("Doctor");
-
-    userCollection.doc(id).delete();
+  void deleteData(String id) async{
+    try {
+      await FirebaseFirestore.instance.collection("Staff").doc("2").collection("Doctor").doc(id).delete();
+      showToast(message: "Doctor deleted successfully");
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => homeAdmin()),
+            (route) => false,
+      );
+    } on Exception catch (e) {
+      print("Error: ${e}");
+    }
   }
 }
 

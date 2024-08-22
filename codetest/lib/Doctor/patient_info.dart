@@ -15,7 +15,7 @@ class _viewPatientInfoState extends State<viewPatientInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(title: "Home Doctor",),
+      appBar: MainAppBar(title: "Medican",),
       body:  TabulateData()
     );
   }
@@ -81,7 +81,7 @@ class _UpdatePatientInfoState extends State<UpdatePatientInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Home Doctor")),
+      appBar: AppBar(title: Text("Medican")),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 200),
         child: Column(

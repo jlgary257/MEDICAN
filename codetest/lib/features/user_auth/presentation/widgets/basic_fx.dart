@@ -51,7 +51,7 @@ class _TabulateDataState extends State<TabulateData> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(title: "Home",),
+      appBar: MainAppBar(title: "MEDICAN",),
       body: FutureBuilder<List<Patient>>(
         future: _patientList,
         builder: (context, snapshot) {
