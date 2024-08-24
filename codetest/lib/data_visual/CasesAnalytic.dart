@@ -1,12 +1,18 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codetest/features/user_auth/presentation/widgets/form_container_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class CasesAnalytic extends StatelessWidget {
+class CasesAnalytic extends StatefulWidget {
   const CasesAnalytic({super.key});
+
+  @override
+  State<CasesAnalytic> createState() => _CasesAnalyticState();
+}
+
+class _CasesAnalyticState extends State<CasesAnalytic> {
+  String? _selectedMedCondition;
 
   @override
   Widget build(BuildContext context) {
@@ -14,77 +20,225 @@ class CasesAnalytic extends StatelessWidget {
         appBar: MainAppBar(
           title: 'Case Analytics',
         ),
-        body: GridView.count( crossAxisCount: 2, children: [ Container(
-          child: FutureBuilder(
-            future: fetchData(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CasesBarChart(snapshot.data as Map<int, int>),
-                );
-              }
-            },
-          ),
-        ),Container(child: FutureBuilder(future: fetchCaseCount(),
-          builder: (context, snapshot){
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else if (snapshot.hasData){
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: HighDiagnose(totalCases: snapshot.data ?? 0),
-              );
-            } else{
-              return Center(child: Text('No data availabale'));
-            }
-          },)),
-          Container(color: Colors.white30,child: FutureBuilder(
-              future: fetchData(),
-              builder: (context, snapshot){
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CasesLineChart(data: snapshot.data as Map<int,int>),
-                  );
-                }
-              }
-          ),),
-          Container(color: Colors.white,),])
-    );
+        body: Column(
+          children: [
+            DropdownButtonFormField<String>(
+              value: _selectedMedCondition,
+              hint: Text("Select Medical Condition"),
+              items: [
+                DropdownMenuItem(
+                  value: "1",
+                  child: Text("Respiratory Infection"),
+                ),
+                DropdownMenuItem(
+                  value: "2",
+                  child: Text("Parasite Infection"),
+                ),
+                DropdownMenuItem(
+                  value: "3",
+                  child: Text("Lumps and Bumps"),
+                ),
+                DropdownMenuItem(
+                  value: "4",
+                  child: Text("Gastrointestinal Disease"),
+                ),
+                DropdownMenuItem(
+                  value: "5",
+                  child: Text("Trauma"),
+                ),
+                DropdownMenuItem(
+                  value: "6",
+                  child: Text("Covid-19"),
+                ),
+                DropdownMenuItem(
+                  value: "7",
+                  child: Text("Common Cases and Others"),
+                ),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  _selectedMedCondition = value;
+                });
+              },
+            ),
+            Expanded(
+              child: GridView.count(crossAxisCount: 2, children: [
+                Container(
+                  decoration: BoxDecoration(border: Border.all(color: Colors.black,width: 2)),
+                  child: FutureBuilder(
+                    future: fetchData(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CasesBarChart(snapshot.data as Map<int, int>),
+                        );
+                      }
+                    },
+                  ),
+                ),
+                Container(
+                    decoration: BoxDecoration(border: Border.all(color: Colors.black,width: 2)),
+                    child: FutureBuilder(
+                  future: fetchCaseCount(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (snapshot.hasData) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: HighDiagnose(totalCases: snapshot.data ?? 0),
+                      );
+                    } else {
+                      return Center(child: Text('No data availabale'));
+                    }
+                  },
+                )),
+                Container(
+                  decoration: BoxDecoration(border: Border.all(color: Colors.black,width: 2)),
+                  child: FutureBuilder(
+                      future: fetchData(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Center(
+                              child: Text('Error: ${snapshot.error}'));
+                        } else {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CasesLineChart(
+                                data: snapshot.data as Map<int, int>),
+                          );
+                        }
+                      }),
+                ),
+                Container(
+                  decoration: BoxDecoration(border: Border.all(color: Colors.black,width: 2)),
+                ),
+              ]),
+            ),
+          ],
+        ));
   }
-}
 
-Future<Map<int, int>> fetchData() async {
-  CollectionReference traumaCollection = FirebaseFirestore.instance
-      .collection('MedicalCondition')
-      .doc('5') // Replace with the actual document ID if needed
-      .collection('Trauma');
+  Future<int> fetchCaseCount() async {
+    CollectionReference medRepCollection;
 
-  QuerySnapshot snapshot = await traumaCollection.get();
+    if (_selectedMedCondition == "1") {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(_selectedMedCondition)
+          .collection("Respiratory_Infection");
+    } else if (_selectedMedCondition == "2") {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(_selectedMedCondition)
+          .collection("Parasite_Infection");
+    } else if (_selectedMedCondition == "3") {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(_selectedMedCondition)
+          .collection("Lumps_and_Bumps");
+    } else if (_selectedMedCondition == "4") {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(_selectedMedCondition)
+          .collection("Gastrointestinal_Disease");
+    } else if (_selectedMedCondition == "5") {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(_selectedMedCondition)
+          .collection("Trauma");
+    } else if (_selectedMedCondition == "6") {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(_selectedMedCondition)
+          .collection("Covid-19");
+    } else if (_selectedMedCondition == "7") {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(_selectedMedCondition)
+          .collection("Common_Cases_and_Others");
+    } else {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(_selectedMedCondition)
+          .collection("Extra");
+    }
 
-  // Map to store year as key and count of cases as value
-  Map<int, int> casesPerYear = {};
+    QuerySnapshot snapshot = await medRepCollection.get();
 
-  for (var doc in snapshot.docs) {
-    String dateString = doc['date']; // Assuming there's a 'date' field
-    DateTime date = _parseDate(dateString);
-    int year = date.year;
-
-    casesPerYear.update(year, (value) => value + 1, ifAbsent: () => 1);
+    return snapshot.size;
   }
 
-  return casesPerYear;
+  Future<Map<int, int>> fetchData() async {
+    CollectionReference medRepCollection;
+
+    if (_selectedMedCondition == "1") {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(_selectedMedCondition)
+          .collection("Respiratory_Infection");
+    } else if (_selectedMedCondition == "2") {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(_selectedMedCondition)
+          .collection("Parasite_Infection");
+    } else if (_selectedMedCondition == "3") {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(_selectedMedCondition)
+          .collection("Lumps_and_Bumps");
+    } else if (_selectedMedCondition == "4") {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(_selectedMedCondition)
+          .collection("Gastrointestinal_Disease");
+    } else if (_selectedMedCondition == "5") {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(_selectedMedCondition)
+          .collection("Trauma");
+    } else if (_selectedMedCondition == "6") {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(_selectedMedCondition)
+          .collection("Covid-19");
+    } else if (_selectedMedCondition == "7") {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(_selectedMedCondition)
+          .collection("Common_Cases_and_Others");
+    } else {
+      medRepCollection = FirebaseFirestore.instance
+          .collection("MedicalCondition")
+          .doc(_selectedMedCondition)
+          .collection("Extra");
+    }
+
+    QuerySnapshot snapshot = await medRepCollection.get();
+
+    // Map to store year as key and count of cases as value
+    Map<int, int> casesPerYear = {};
+
+    for (var doc in snapshot.docs) {
+      String dateString = doc['date']; // Assuming there's a 'date' field
+      DateTime date = _parseDate(dateString);
+      int year = date.month;
+
+      casesPerYear.update(year, (value) => value + 1, ifAbsent: () => 1);
+    }
+
+    return casesPerYear;
+  }
 }
 
 // Helper function to parse the date string
@@ -100,6 +254,18 @@ class CasesBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (data.isEmpty) {
+      return Center(
+        child: Text(
+          'No data available',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      );
+    }
     return BarChart(
       BarChartData(
         alignment: BarChartAlignment.spaceAround,
@@ -168,19 +334,22 @@ class CasesBarChart extends StatelessWidget {
   }
 
   List<BarChartGroupData> _getBarGroups() {
-    List<MapEntry<int,int>> sortedEntries = data.entries.toList()..sort((a,b) => a.key.compareTo(b.key));
-    return sortedEntries.map((entry) => BarChartGroupData(
-      x: entry.key,
-      barRods: [
-        BarChartRodData(
-          toY: entry.value.toDouble(),
-          color: Colors.red,
-          width: 15,
-          borderRadius: BorderRadius.circular(4),
-        ),
-      ],
-    ),
-    )
+    List<MapEntry<int, int>> sortedEntries = data.entries.toList()
+      ..sort((a, b) => a.key.compareTo(b.key));
+    return sortedEntries
+        .map(
+          (entry) => BarChartGroupData(
+            x: entry.key,
+            barRods: [
+              BarChartRodData(
+                toY: entry.value.toDouble(),
+                color: Colors.red,
+                width: 15,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ],
+          ),
+        )
         .toList();
   }
 
@@ -189,11 +358,11 @@ class CasesBarChart extends StatelessWidget {
   }
 }
 
-
 class CasesLineChart extends StatefulWidget {
-  final Map<int,int> data;
+  final Map<int, int> data;
 
   CasesLineChart({required this.data});
+
   @override
   _CasesLineChartState createState() => _CasesLineChartState();
 }
@@ -209,17 +378,30 @@ class _CasesLineChartState extends State<CasesLineChart> {
   }
 
   loadChartData() {
-    List<MapEntry<int,int>> sortedEntries = widget.data.entries.toList()..sort((a,b) => a.key.compareTo(b.key));
-    List<FlSpot> dataPoints = sortedEntries.map((entry) => FlSpot(entry.key.toDouble(), entry.value.toDouble())).toList();
+    List<MapEntry<int, int>> sortedEntries = widget.data.entries.toList()
+      ..sort((a, b) => a.key.compareTo(b.key));
+    List<FlSpot> dataPoints = sortedEntries
+        .map((entry) => FlSpot(entry.key.toDouble(), entry.value.toDouble()))
+        .toList();
     setState(() {
-
       spot = dataPoints;
-
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (spot.isEmpty) {
+      return Center(
+        child: Text(
+          'No data available',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      );
+    }
     return AspectRatio(
       aspectRatio: 1.5,
       child: LineChart(
@@ -280,19 +462,24 @@ class HighDiagnose extends StatefulWidget {
   final int totalCases;
 
   const HighDiagnose({required this.totalCases});
+
   @override
   State<HighDiagnose> createState() => _HighDiagnoseState();
 }
 
-class _HighDiagnoseState extends State<HighDiagnose> with SingleTickerProviderStateMixin{
+class _HighDiagnoseState extends State<HighDiagnose>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<int> _animation;
+
   //int _totalCases = 0;
   @override
-
-  void initState(){
+  void initState() {
     super.initState();
-    _controller =AnimationController(vsync: this,duration: const Duration(seconds: 2),);
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    );
 
     _animation = IntTween(begin: 0, end: widget.totalCases).animate(_controller)
       ..addListener(() {
@@ -303,11 +490,11 @@ class _HighDiagnoseState extends State<HighDiagnose> with SingleTickerProviderSt
     _controller.forward();
   }
 
-
-  void dispose(){
+  void dispose() {
     _controller.dispose();
     super.dispose();
   }
+
   Widget build(BuildContext context) {
     return Center(
       child: Column(
@@ -339,16 +526,5 @@ class _HighDiagnoseState extends State<HighDiagnose> with SingleTickerProviderSt
         ],
       ),
     );
-
   }
-}
-Future<int> fetchCaseCount() async {
-  CollectionReference traumaCollection = FirebaseFirestore.instance
-      .collection('MedicalCondition')
-      .doc('5') // Replace with the actual document ID if needed
-      .collection('Trauma');
-
-  QuerySnapshot snapshot = await traumaCollection.get();
-
-  return snapshot.size;
 }

@@ -36,8 +36,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => SplashScreen(
           // Here, you can decide whether to show the LoginPage or HomePage based on user authentication
-          //child: LoginPage()
-          child: BarExample()
+          child: LoginPage()
+
         ),
         '/login': (context) => LoginPage(),
         '/signUp': (context) => SignUpPage(),
