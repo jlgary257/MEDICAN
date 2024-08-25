@@ -3,9 +3,8 @@ import 'package:codetest/Doctor/home_dr.dart';
 import 'package:codetest/Doctor/patient_info.dart';
 import 'package:codetest/data_visual/CasesAnalytic.dart';
 import 'package:codetest/data_visual/MainBI.dart';
-import 'package:codetest/data_visual/SumCasesEx.dart';
+import 'package:codetest/data_visual/SystemDV.dart';
 import 'package:codetest/data_visual/bar_chart_example.dart';
-import 'package:codetest/data_visual/yearCases.dart';
 import 'package:codetest/features/user_auth/firebase_auth_implementation/password_change.dart';
 import 'package:codetest/features/user_auth/presentation/pages/login_page.dart';
 import 'package:codetest/features/user_auth/presentation/widgets/basic_fx.dart';
@@ -27,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(Duration(seconds: 3), (){
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => CasesAnalytic(),),
+        MaterialPageRoute(builder: (context) => SystemDataV(),),
               (route) => false // Predicate to remove all routes
       );
     });
