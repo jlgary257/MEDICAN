@@ -58,24 +58,39 @@ class _SystemDataVState extends State<SystemDataV> {
   }
 
   Future<Map<String, int>> fetchDoctorCaseData() async {
-    CollectionReference doctorCollection = FirebaseFirestore.instance
-        .collection("MedicalCondition")
-        .doc("2")
-        .collection("Parasite_Infection");
-
-    QuerySnapshot snapshot = await doctorCollection.get();
+    final firestore = FirebaseFirestore.instance;
+    Set<String> emails = {};
+    final List<String> medicalCondition = [
+      "Respiratory_Infection",
+      "Parasite_Infection",
+      "Lumps_and_Bumps",
+      "Gastrointestinal_Disease",
+      "Trauma",
+      "Covid-19",
+      "Common_Cases_and_Others"
+    ];
 
     Map<String, int> doctorCases = {};
-    Set<String> emails = {};
+    for (int num = 1; num <= 7; num++) {
+      for (String condition in medicalCondition) {
+        CollectionReference medConCollection = firestore
+            .collection("MedicalCondition")
+            .doc(num.toString())
+            .collection(condition);
 
-    for (var doc in snapshot.docs) {
-      String doctorEmail = doc['DoctorEmail'];
-      emails.add(doctorEmail);
 
-      if (doctorCases.containsKey(doctorEmail)) {
-        doctorCases[doctorEmail] = doctorCases[doctorEmail]! + 1;
-      } else {
-        doctorCases[doctorEmail] = 1;
+        QuerySnapshot snapshot = await medConCollection.get();
+
+        for (var doc in snapshot.docs) {
+          String doctorEmail = doc['DoctorEmail'];
+          emails.add(doctorEmail);
+
+          if (doctorCases.containsKey(doctorEmail)) {
+            doctorCases[doctorEmail] = doctorCases[doctorEmail]! + 1;
+          } else {
+            doctorCases[doctorEmail] = 1;
+          }
+        }
       }
     }
 
@@ -93,7 +108,6 @@ class _SystemDataVState extends State<SystemDataV> {
 
     return namedDoctorCases;
   }
-
 }
 
 Future<String?> getNamebyEmail(String DoctorEmail) async {
@@ -102,9 +116,10 @@ Future<String?> getNamebyEmail(String DoctorEmail) async {
         .collection("Staff")
         .doc("2")
         .collection("Doctor")
-        .where('email', isEqualTo: DoctorEmail).get();
+        .where('email', isEqualTo: DoctorEmail)
+        .get();
 
-    if(doctorSnapshot.docs.isNotEmpty){
+    if (doctorSnapshot.docs.isNotEmpty) {
       return doctorSnapshot.docs[0].data()['name'] as String?;
     }
 
