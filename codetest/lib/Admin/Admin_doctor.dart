@@ -1,26 +1,23 @@
+
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:codetest/Admin/Admin_doctor.dart';
-import 'package:codetest/Admin/admin_info.dart';
-import 'package:codetest/Patient/Main_Patient.dart';
-import 'package:codetest/Patient/patient_info.dart';
-import 'package:codetest/data_visual/MainBI.dart';
-import 'package:codetest/features/user_auth/presentation/widgets/basic_fx.dart';
+import 'package:codetest/features/user_auth/presentation/pages/signUpPage.dart';
 import 'package:codetest/features/user_auth/presentation/widgets/form_container_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../features/user_auth/presentation/pages/login_page.dart';
-import '../features/user_auth/presentation/pages/signUpPage.dart';
+import '../features/user_auth/presentation/widgets/basic_fx.dart';
 import '../global/toast.dart';
+import 'home_admin.dart';
 
-class homeAdmin extends StatefulWidget {
-  const homeAdmin({super.key});
+class AdminDoctorMain extends StatefulWidget {
+  const AdminDoctorMain({super.key});
 
   @override
-  State<homeAdmin> createState() => _homeAdminState();
+  State<AdminDoctorMain> createState() => _AdminDoctorMainState();
 }
 
-class _homeAdminState extends State<homeAdmin> {
+class _AdminDoctorMainState extends State<AdminDoctorMain> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,57 +29,62 @@ class _homeAdminState extends State<homeAdmin> {
           children: [
             Center(
               child: Text(
-                "Administrator",
+                "Doctor Management",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
             SizedBox(height: 10),
-            SizedBox(height: 10),
-            RedElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AdminDoctorMain()),
-                );
-              },
-              text: "Doctor",
+            Expanded(
+              child: StreamBuilder<List<DoctorModel>>(
+                stream: _readData(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  if (snapshot.data!.isEmpty) {
+                    return Center(child: Text("No Data Yet"));
+                  }
+                  final doctors = snapshot.data;
+                  return SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.all(8),
+                      child: Column(
+                        children: doctors!.map((doctor) {
+                          return ListTile(
+                            leading: GestureDetector(
+                              onTap: () {
+                                showDeleteConfirmation(context, () {
+                                  deleteData(doctor.DoctorId!);
+                                });
+                              },
+                              child: Icon(Icons.delete),
+                            ), //delete//update
+                            title: Text(doctor.name!),
+                            subtitle: Text(doctor.email!),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
             SizedBox(height: 10),
             RedElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AddAdminData()),
+                  MaterialPageRoute(builder: (context) => SignUpPage()),
                 );
               },
-              text: "New Admin",
+              text: "New Doctor",
             ),
             SizedBox(height: 10),
-            RedElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MainPatient()),
-                );
-              },
-              text: "Patient",
-            ),
-            SizedBox(height: 10),
-            RedElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MainBi()),
-                );
-              },
-              text: "Analytics & BI",
-            ),
           ],
         ),
       ),
     );
   }
-
   Stream<List<DoctorModel>> _readData() {
     final doctorCollection = FirebaseFirestore.instance.collection("Staff").doc("2").collection("Doctor");
 
@@ -117,6 +119,9 @@ class _homeAdminState extends State<homeAdmin> {
     }
   }
 }
+
+
+
 
 class DoctorModel {
   final String? name;
