@@ -96,7 +96,7 @@ class _CasesAnalyticState extends State<CasesAnalytic> {
                         child: HighDiagnose(totalCases: snapshot.data ?? 0),
                       );
                     } else {
-                      return Center(child: Text('No data availabale'));
+                      return Center(child: Text('No data available'));
                     }
                   },
                 )),
