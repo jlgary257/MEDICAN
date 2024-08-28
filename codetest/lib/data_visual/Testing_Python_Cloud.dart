@@ -9,23 +9,31 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String message = '';
+  String message = 'Loading...';
 
   Future<void> fetchMessage() async {
-    final url = 'https://us-central1-medican-jl.cloudfunctions.net/testing_python_flutter'; // Replace with your actual URL
+    const url = 'https://us-central1-medican-jl.cloudfunctions.net/testing_python_flutter'; // Replace with your actual URL
 
-    final response = await http.get(Uri.parse(url));
+    try {
+      final response = await http.get(Uri.parse(url));
 
-    if (response.statusCode == 200) {
+      if (response.statusCode == 200) {
+        setState(() {
+          message = response.body;
+        });
+      } else {
+        setState(() {
+          message = 'Error fetching message: ${response.statusCode}';
+        });
+      }
+    } catch (e) {
       setState(() {
-        message = response.body;
-      });
-    } else {
-      setState(() {
-        message = 'Error fetching message: ${response.statusCode}';
+        message = 'Failed to load message: $e';
       });
     }
   }
+
+
 
   @override
   void initState() {
