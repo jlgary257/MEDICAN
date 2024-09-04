@@ -128,7 +128,6 @@ class _AddAdminDataState extends State<AddAdminData> {
 
     final adminDoc = staffDocRef.collection("Admin").doc();
 
-    // Creating the new doctor model
     final newAdmin = AdminModel(
       name: name,
       email: email,
@@ -136,7 +135,6 @@ class _AddAdminDataState extends State<AddAdminData> {
       StaffId: staffId,
     ).toJson();
 
-    // Adding the doctor information to the 'doctor' subcollection
     await adminDoc.set(newAdmin);
 
     setState(() {
@@ -173,13 +171,13 @@ class AdminModel {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      "name": name,
-      "email": email,
-      "AdminId": AdminId,
-      "StaffId" : StaffId,
-    };
-  }
+    Map<String, dynamic> toJson() {
+      return {
+        "name": name,
+        "email": email,
+        "AdminId": AdminId,
+        "StaffId" : StaffId,
+      };
+    }
 
 }

@@ -5,12 +5,13 @@ import 'package:codetest/Doctor/patient_info.dart';
 import 'package:codetest/data_visual/CasesAnalytic.dart';
 import 'package:codetest/data_visual/MainBI.dart';
 import 'package:codetest/data_visual/SystemDV.dart';
-import 'package:codetest/data_visual/Testing_Python_Cloud.dart';
 import 'package:codetest/data_visual/bar_chart_example.dart';
 import 'package:codetest/features/user_auth/presentation/pages/login_page.dart';
 import 'package:codetest/features/user_auth/presentation/widgets/basic_fx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+
+import '../../../Doctor/form_consult.dart';
 
 class SplashScreen extends StatefulWidget {
   final Widget? child;
@@ -21,15 +22,16 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 3), (){
+    Future.delayed(Duration(seconds: 3), () {
       Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => MyHomePage(),),
-              (route) => false // Predicate to remove all routes
-      );
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginPage(),
+          ),
+          (route) => false // Predicate to remove all routes
+          );
     });
     super.initState();
   }
@@ -38,12 +40,12 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-          child: Text("Welcome to Medical Analysis System",
-              style: TextStyle(
-                color: Colors.red,
-                fontWeight: FontWeight.bold,
-                fontSize: 30,
-              )).animate().fade(duration: 1000.ms),
-        ));
+      child: Text("Welcome to Medical Analysis System",
+          style: TextStyle(
+            color: Colors.red,
+            fontWeight: FontWeight.bold,
+            fontSize: 30,
+          )).animate().fade(duration: 1000.ms),
+    ));
   }
 }

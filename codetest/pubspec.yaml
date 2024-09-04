@@ -48,6 +48,8 @@ dependencies:
   fl_chart: ^0.68.0
   cloud_functions: ^4.6.0
   http: ^1.2.2
+  html: ^0.15.4
+
 
 dev_dependencies:
   flutter_test:
