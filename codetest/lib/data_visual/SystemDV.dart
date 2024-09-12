@@ -20,6 +20,7 @@ class _SystemDataVState extends State<SystemDataV> {
           crossAxisCount: 2,
           children: [
             Container(
+              decoration: BoxDecoration(border: Border.all(color: Colors.black,width: 2)),
               child: FutureBuilder(
                 future: fetchDoctorCaseData(),
                 builder: (context, snapshot) {

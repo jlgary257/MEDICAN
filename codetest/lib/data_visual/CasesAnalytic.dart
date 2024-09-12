@@ -232,7 +232,7 @@ class _CasesAnalyticState extends State<CasesAnalytic> {
     for (var doc in snapshot.docs) {
       String dateString = doc['date']; // Assuming there's a 'date' field
       DateTime date = _parseDate(dateString);
-      int year = date.month;
+      int year = date.year;
 
       casesPerYear.update(year, (value) => value + 1, ifAbsent: () => 1);
     }

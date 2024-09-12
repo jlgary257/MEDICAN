@@ -12,15 +12,16 @@ import 'features/user_auth/presentation/pages/signUpPage.dart';
 
 //void main() => runApp(MyApp());
 
-Future main() async{
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if(kIsWeb){
-    await Firebase.initializeApp(options:
-    FirebaseOptions(apiKey: "AIzaSyCdsY6gatBHi8j89xR1pBGszy_B_48V2Cg",
-        appId: "1:220570038936:web:88fbe427e147e5103c56ed",
-        messagingSenderId: "220570038936",
-        projectId: "medican-jl"));
-  }else {
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+        options: FirebaseOptions(
+            apiKey: "AIzaSyCdsY6gatBHi8j89xR1pBGszy_B_48V2Cg",
+            appId: "1:220570038936:web:88fbe427e147e5103c56ed",
+            messagingSenderId: "220570038936",
+            projectId: "medican-jl"));
+  } else {
     await Firebase.initializeApp();
   }
   runApp(MyApp());
@@ -34,10 +35,8 @@ class MyApp extends StatelessWidget {
       title: 'MEDICAN', // App title displayed in the status bar
       routes: {
         '/': (context) => SplashScreen(
-          // Here, you can decide whether to show the LoginPage or HomePage based on user authentication
-          child: LoginPage()
-
-        ),
+            // Here, you can decide whether to show the LoginPage or HomePage based on user authentication
+            child: LoginPage()),
         '/login': (context) => LoginPage(),
         '/signUp': (context) => SignUpPage(),
         '/homeAd': (context) => homeAdmin(),
@@ -46,5 +45,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
